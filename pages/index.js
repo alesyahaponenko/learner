@@ -12,9 +12,7 @@ function App() {
         delay: 0.6,
         ease: 'power3.InOut',
         opacity: 0,
-        stagger: {
-          amount: 0.6,
-        },
+        stagger: 0.6,
       }
     )
   }

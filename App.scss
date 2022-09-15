@@ -1,63 +1,49 @@
-.header {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  height: 100px;
-  a {
-    margin: 0 28px;
-    text-decoration: none;
-    color: #181818;
-    font-size: 12px;
-    font-weight: 600;
-    font-family: 'Poppins';
-  }
-}
-
 .container {
   position: relative;
   width: 1280px;
   min-width: 1280px;
   margin: 0 auto;
   display: flex;
-  justify-content: center;
-  .page {
-    position: absolute;
-    .inner {
-      display: flex;
-      justify-content: center;
-      h1 {
-        font-family: 'Bebas Neue';
-        font-size: 52px;
-        letter-spacing: 0.1rem;
-        .line-wrap {
-          overflow: hidden;
-          height: 66px;
-        }
-      }
-      p {
-        font-family: 'Poppins';
-        margin-top: 200px;
-        width: 340px;
-        font-weight: 300;
-        line-height: 24px;
-        font-size: 14px;
-      }
-    }
-  }
+  font-size: 1vw;
+  position: relative;
+  overflow: hidden;
 }
 
-.page-enter {
-  opacity: 0;
+li {
+  list-style: none;
 }
-.page-enter-active {
-  opacity: 1;
-  transition: opacity 400ms;
-  transition-delay: 600ms;
+.babbles li {
+  display: flex;
+  width: 10vw;
+  height: 10vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(11,89,158,1) 0%, rgba(0,47,112,1) 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
-.page-exit {
-  opacity: 1;
+.query {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  display: flex;
+  color: white;
+  width: 30vw;
+  height: 10vw;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  background: radial-gradient(circle, rgba(11,89,158,1) 0%, rgba(0,47,112,1) 100%);
 }
-.page-exit-active {
-  opacity: 0;
-  transition: opacity 400ms;
+.loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
