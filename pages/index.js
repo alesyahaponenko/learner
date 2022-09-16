@@ -1,50 +1,34 @@
-import { CSSTransition } from 'react-transition-group'
 import { gsap } from 'gsap'
 import Home from '../components/Home'
+import Header from "../components/Header";
+import { useRef, useState} from "react";
 
 function App() {
-  const onEnter = (node) => {
-    gsap.from(
-      [node.children[0].firstElementChild, node.children[0].lastElementChild],
-      0.6,
-      {
-        y: 30,
-        delay: 0.6,
-        ease: 'power3.InOut',
-        opacity: 0,
-        stagger: 0.6,
-      }
-    )
-  }
-  const onExit = (node) => {
-    gsap.to(
-      [node.children[0].firstElementChild, node.children[0].lastElementChild],
-      0.6,
-      {
-        y: -30,
-        ease: 'power3.InOut',
-        stagger: {
-          amount: 0.2,
-        },
-      }
-    )
-  }
+    const [mousePosition, setMousePosition] = useState({
+        x: 0,
+        y: 0
+    })
+    const ref1 = useRef();
+    const ref2 = useRef();
+
+    function handleMouseMove(ev) {
+        setMousePosition({x: - (window.innerWidth / 2 - ev.pageX) / 960, y: - (window.innerHeight / 2 - ev.pageY) / 960
+            } )
+        gsap.to(ref1.current, {x:mousePosition.x,y:mousePosition.y, duration:1})
+        gsap.to(ref2.current, {x:mousePosition.x,y:mousePosition.y, duration:1})
+    }
+
 
   return (
     <>
-      <div className="container">
-        <CSSTransition
-          in={true}
-          timeout={1200}
-          classNames="page"
-          onExit={onExit}
-          onEntering={onEnter}
-          unmountOnExit
-        >
+      <div className="container"  onMouseMove={handleMouseMove}>
           <div className="page">
-            <Home />
+            <Header />
+            <Home ref={ {
+                ref1: ref1,
+                ref2: ref2
+            }} />
           </div>
-        </CSSTransition>
       </div>
     </>
   )
