@@ -34,7 +34,7 @@ const Home = forwardRef( (props, ref)  => {
 
         tl_intro.current = gsap.timeline({paused: true})
 
-        tl_intro.current.from(('.query'), {y: 250, duration: 1},"<+=0.3")
+        tl_intro.current.from(('.query'), {y: 400, duration: 1},"<+=0.3")
         tl_intro.current.from(('.st0'), {scale: 0, duration: 1, ease: "elastic.out(1, 0.6)"},"<+=0.1")
         tl_intro.current.from(('.st1'), {scale: 0, duration: 1, ease: "elastic.out(1, 0.6)"},"<+=0.2")
         tl_intro.current.from(('.man_silhouette'), {scale: 0, duration: 1, ease: "elastic.out(1, 0.8)"},"<+=0.3")
@@ -96,7 +96,10 @@ const Home = forwardRef( (props, ref)  => {
                     </div>
                 </div>
                 <div className="query">
-                    {jsonDataArr && jsonDataArr[0].block_name}
+                    <div className="name">{jsonDataArr && jsonDataArr[0].block_name}</div>
+                    <div className="short_descr">{jsonDataArr && jsonDataArr[0].short_description}
+                        <div className="more">more...</div>
+                    </div>
                 </div>
                 <div className="bubbles">
                     <ul ref={el}>
