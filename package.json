@@ -3,15 +3,25 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.5",
     "axios": "^0.27.2",
     "gsap": "file:./gsap_club_18.05.2022.tgz",
     "next": "latest",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-redux": "^8.0.2",
     "react-transition-group": "^4.3.0",
     "sass": "1.29.0"
+  },
+  "devDependencies": {
+    "@next/eslint-plugin-next": "^12.3.0",
+    "eslint": "^8.23.1",
+    "eslint-config-next": "12.3.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "2.7.1"
   }
 }

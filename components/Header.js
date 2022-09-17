@@ -1,11 +1,5 @@
-
 const Header = () => {
-
-    return (
-        <div className="header_wrap">
-            <div className="logo">Learner Experience</div>
-        </div>
-    )
+  return <div className="header_wrap"></div>
 }
 
 export default Header
