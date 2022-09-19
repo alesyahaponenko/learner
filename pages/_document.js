@@ -5,8 +5,8 @@ export default function Document() {
     <Html>
       <Head>
         <link
-          href="https://fonts.googleapis.com/css?family=Bebas+Neue|Poppins:300,400&display=swap"
-          rel="stylesheet"
+          href='https://fonts.googleapis.com/css?family=Bebas+Neue|Poppins:300,400&display=swap'
+          rel='stylesheet'
         />
       </Head>
       <body>

@@ -1,9 +1,14 @@
-import { configureStore } from '@reduxjs/toolkit'
-import chatReducer from "../store/chatSlicer";
+import {configureStore} from '@reduxjs/toolkit'
+import bubblesReducer from './feutures/bubblesSlicer'
+
 
 
 export const store = configureStore({
-    reducer: {
-        chat: chatReducer
-    }
+  reducer: {
+    bubbles: bubblesReducer,
+  },
+  middleware: getDefaultMiddleware =>
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }),
 })

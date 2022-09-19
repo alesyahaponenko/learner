@@ -2,13 +2,17 @@
   box-sizing: border-box;
   outline: none;
 }
-img, svg {
+
+img,
+svg {
   width: 100%;
   height: auto;
 }
+
 ul {
   padding: 0;
 }
+
 html,
 body,
 body > div:first-child,
@@ -16,11 +20,13 @@ div#__next,
 div#__next > div {
   height: 100%;
 }
+
 body {
   font-family: sans-serif;
   overflow: hidden;
   font-size: 1vw;
 }
+
 .container {
   position: relative;
   width: 100%;
@@ -32,44 +38,92 @@ body {
   overflow: hidden;
 }
 
+.block_name {
+  font-size: 1vw;
+  pointer-events: none;
+}
+
+.short_description {
+  position: absolute;
+  display: none;
+  bottom: 20vh;
+  background: #20b9fc;
+  border-radius: 10px;
+  padding: 15px;
+  width: 135%;
+
+  .more {
+    display: none;
+    color: #ddd;
+  }
+}
+.short_description:after {
+  content: '';
+  position: absolute;
+  left: 42%;
+  top: 99%;
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid #20b9fc;
+  clear: both;
+}
+
+
+.long_description {
+  display: none;
+}
+
+.liAnim.active {
+  font-size: 1vw;
+  cursor: auto;
+
+  .block_name {
+    font-size: 2vw;
+    margin-bottom: 10vh;
+  }
+
+  .short_description {
+    top: 50%;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+    max-width: 80%;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .short_description:after {
+    content: none;
+  }
+  .more {
+    display: flex;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .less {
+    cursor: pointer;
+    margin-top: 10px;
+    color: #ddd;
+  }
+
+  .long_description {
+    display: flex;
+    flex-direction: column;
+    max-width: 80%;
+    position: absolute;
+    top: 50%;
+    opacity: 0;
+    visibility: hidden;
+    margin-top: 50px;
+  }
+}
+
 li {
   list-style: none;
 }
 
 
-.bubbles {
-  position: absolute;
-  top: 50vh;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-}
-.bubbles ul {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  width: 100%;
-  height: 80%;
-}
-.bubbles li {
-  display: flex;
-  width: 10vw;
-  height: 10vw;
-  border-radius: 50%;
-  background: radial-gradient(circle, #0b599e 0%, #002f70 100%);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  position: absolute;
-  top: 50vh;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 10px;
-  opacity: 0;
-  cursor: pointer;
-  display: flex;
-}
