@@ -9,12 +9,17 @@ const Bubbles = () => {
   const dispatch = useDispatch()
 
   const [body, setBody] = useState(null)
+  const [clickBubbleState, setClickBubbleState] = useState(false)
+
   const el = useRef()
   const q = gsap.utils.selector(el)
   const tl_intro = useRef(null)
   const tl_more = useRef(null)
   const tl_hover = useRef(null)
   const tl_changeBubbles = useRef(null)
+
+  const [elBig, setElBig] = useState(null)
+  const [elSmall, setElSmall] = useState(null)
 
   const predictions_copy = [...predictions]
   const predictions_sorted = predictions_copy.sort(function (a, b) {
@@ -45,23 +50,48 @@ const Bubbles = () => {
     const rad = Math.PI / 180
 
     for (let i = 1; i < lenght_el; i++) {
+      console.log('startAngle',startAngle)
+      console.log('i',i)
+
       tl_intro.current.to(
         q('li')[i],
         {
-          opacity: 1,
+          // opacity: ()=> {
+          //   let opacity = ((lenght_el - i) / (lenght_el - 1)).toFixed(1)
+          //   if (opacity < 0.05) opacity = 0.05
+          //   return opacity
+          // },
+          opacity:1,
+          // background: ()=> {
+          //   let bgColorOpacity = ((lenght_el - i) / (lenght_el - 1))*100
+          //   if (bgColorOpacity < 0.05) bgColorOpacity = 0.05
+          //   let bgColor = `radial-gradient(circle, #0b599e 0%, rgb(0 47 112 / ${bgColorOpacity}%) 100%)`
+          //   return bgColor
+          // },
           x: vw(5) + vh(37) * Math.cos(startAngle * rad),
           y: vw(5) + vh(37) * Math.sin(startAngle * rad),
           duration: 1,
         },
         i / 6
       )
+      tl_intro.current.to(
+          q('li')[i],
+          {
+            background: ()=> {
+              let bgColorOpacity = ((lenght_el - i) / (lenght_el - 1))*100
+              if (bgColorOpacity < 0.05) bgColorOpacity = 0.05
+              let bgColor = `radial-gradient(circle, #0b599e 0%, rgb(0 47 112 / ${bgColorOpacity}%) 100%)`
+              return bgColor
+            }},
+          i / 6)
       startAngle += angle
+
     }
     tl_intro.current.to(
       q('li')[0],
       {
-        y: vh(0),
-        x: vw(50),
+        top:0,
+        left:"40vw",
         opacity: 1,
         width: '25vw',
         height: '25vw',
@@ -117,8 +147,8 @@ const Bubbles = () => {
   }
 
 
+
   const calculatePosition = (element)=>{
-    console.log(body)
     const rect = element.getBoundingClientRect();
 
     const scrollTop  = window.pageYOffset || body.scrollTop  || 0;
@@ -135,30 +165,39 @@ const Bubbles = () => {
     };
   }
 
-  const clickBubble = (e) => {
-    if (e.target.classList.contains('active') || !e.target.classList.contains('liAnim')) return
-    let positionSmall = calculatePosition(e.target)
-    let positionBig = calculatePosition(q('.liAnim.active')[0])
+  useEffect(()=>{
+    // let positionBig = calculatePosition(q('.liAnim.active')[0])
+    // let positionSmall = calculatePosition(elBig)
+    if (elSmall && elBig) {
+    let positionBig =calculatePosition(elBig)
+    let positionSmall =calculatePosition(elSmall)
 
-    tl_changeBubbles.current = gsap.timeline({ paused: true })
-    tl_changeBubbles.current.to(e.target, {
-      width: positionBig.width,
-      height: positionBig.height,
+    let tl_changeBubbles = gsap.timeline({ paused: true })
+    tl_changeBubbles.to(elSmall, {
+      width: '25vw',
+      height: '25vw',
       left: ()=>positionBig.left - positionSmall.left,
       top: ()=>positionBig.top - positionSmall.top,
-      onStart:()=>e.target.classList.add('active')
     })
-    tl_changeBubbles.current.to(q('.liAnim.active')[0], {
+    tl_changeBubbles.to(elBig, {
       width: '17vh',
       height: '17vh',
       left: () => positionSmall.left - positionBig.left,
       top: () => positionSmall.top - positionBig.top,
       onComplete: () => {
-        q('.liAnim.active')[0].classList.remove('active')
+        elBig.classList.remove('active')
+        elSmall.classList.add('active')
       },
     })
-    tl_changeBubbles.current.play()
+    tl_changeBubbles.play()
+    }
 
+  },[elSmall])
+
+  const clickBubble = (e) => {
+    if (e.target.classList.contains('active') || !e.target.classList.contains('liAnim')) return
+    setElSmall(e.target)
+    setElBig(q('.liAnim.active')[0])
   }
 
   return (
