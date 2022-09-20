@@ -1,0 +1,33 @@
+.wrap {
+}
+.infoBtn {
+  border-radius: 50%;
+  background: #fff;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  box-shadow: 4px 4px 7px -3px rgb(0 0 0 / 15%);
+  cursor: pointer;
+  z-index: 9;
+  transition: all 0.3s;
+
+  &:hover {
+    box-shadow: 4px 4px 14px -3px rgb(0 0 0 / 25%);
+    transition: all 0.3s;
+  }
+
+  span {
+    border-radius: 50%;
+    background: #f3f8ff;
+    width: 95%;
+    height: 95%;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    color: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+}

@@ -33,7 +33,6 @@ const Chat = () => {
   }
 
   const openModal = () => {
-    tl_Modal.current.play()
   }
 
   useLayoutEffect(() => {
@@ -47,19 +46,15 @@ const Chat = () => {
     )
     tl_Modal.current.to(chatInner.current, { autoAlpha: 1 }, '<+=0.2')
     tl_Modal.current.to(closeModalRef.current, { autoAlpha: 1 }, '<+=0.3')
+    tl_Modal.current.play()
+
   }, [])
 
   return (
     <>
-      <div className={styles.chatStartButton} onClick={openModal}>
-        Chat
-      </div>
       <div className={styles.chatWrap} ref={modal}>
         <div className={styles.closeModal} ref={closeModalRef}>
-          <div className={styles.closeBtn} onClick={closeModal}>
-            <span></span>
-            <span></span>
-          </div>
+         <span>Conversation</span>
         </div>
         <div className={styles.chatInner} ref={chatInner}>
           <div className={styles.chatWindow} ref={textRef}>

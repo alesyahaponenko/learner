@@ -11,6 +11,7 @@ svg {
 
 ul {
   padding: 0;
+  margin: 0;
 }
 
 html,
@@ -41,89 +42,7 @@ body {
   overflow: hidden;
 }
 
-.block_name {
-  font-size: 1vw;
-  pointer-events: none;
-}
 
-.short_description {
-  position: absolute;
-  display: none;
-  bottom: 20vh;
-  background: #20b9fc;
-  border-radius: 10px;
-  padding: 15px;
-  width: 135%;
-
-  .more {
-    display: none;
-    color: #ddd;
-  }
-}
-.short_description:after {
-  content: '';
-  position: absolute;
-  left: 42%;
-  top: 99%;
-  width: 0;
-  height: 0;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-top: 20px solid #20b9fc;
-  clear: both;
-}
-
-
-.long_description {
-  display: none;
-}
-
-.liAnim.active {
-  font-size: 1vw;
-  cursor: auto;
-
-  .block_name {
-    font-size: 2vw;
-    margin-bottom: 10vh;
-  }
-
-  .short_description {
-    top: 50%;
-    background: transparent;
-    border-radius: 0;
-    padding: 0;
-    max-width: 80%;
-    width: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .short_description:after {
-    content: none;
-  }
-  .more {
-    display: flex;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-
-  .less {
-    cursor: pointer;
-    margin-top: 10px;
-    color: #ddd;
-  }
-
-  .long_description {
-    display: flex;
-    flex-direction: column;
-    max-width: 80%;
-    position: absolute;
-    top: 50%;
-    opacity: 0;
-    visibility: hidden;
-    margin-top: 50px;
-  }
-}
 
 li {
   list-style: none;

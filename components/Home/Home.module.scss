@@ -1,0 +1,41 @@
+.exitBtn {
+  position: absolute;
+  right: 30px;
+  top: 30px;
+}
+
+.coachingPanel {
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 20vw;
+
+  span {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+}
+
+.infoButton {
+  position: absolute;
+  right: -40px;
+  top: 20px;
+}
+
+.title {
+  position: absolute;
+  left: 50%;
+  top: 50px;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 2vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9;
+}
+

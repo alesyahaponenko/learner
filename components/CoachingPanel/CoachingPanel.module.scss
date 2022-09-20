@@ -1,0 +1,22 @@
+.wrap {
+  position: fixed;
+  bottom: 130px;
+  right: 30px;
+  text-align: center;
+  border-radius: 20px;
+  width: 400px;
+  height: 400px;
+  background: #fff;
+  z-index: 9999;
+  box-shadow: rgb(0 0 0 / 10%) 0px 0px 30px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+}
+.textP {
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 1.2vw;
+  color: #7ac6e7;
+}

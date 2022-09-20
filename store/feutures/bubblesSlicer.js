@@ -15,7 +15,7 @@ export const bubblesSlice = createSlice({
   initialState: {
     loaded: false,
     startManAnimation: 0,
-    moveBubblesToStartPositions: 0,
+    moveBubblesToStartPositions: 1,
     mouseCoordinate: { x: 0, y: 0 },
     predictions: [],
     message: '',

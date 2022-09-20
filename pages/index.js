@@ -1,4 +1,4 @@
-import Home from '../components/Home'
+import Home from '../components/Home/Home'
 import Header from '../components/Header'
 import { useState } from 'react'
 import {useDispatch} from 'react-redux';

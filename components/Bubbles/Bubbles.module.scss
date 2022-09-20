@@ -1,39 +1,120 @@
-.bubbles {
+.block_name {
+  font-size: 1vw;
+  pointer-events: none;
+}
+
+.short_description {
   position: absolute;
-  top: 50vh;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
+  display: none;
+  bottom: 20vh;
+  background: #20b9fc;
+  border-radius: 10px;
+  padding: 15px;
+  width: 135%;
+
+  .more {
+    display: none;
+    color: #222;
+  }
+}
+
+.short_description:after {
+  content: '';
+  position: absolute;
+  left: 42%;
+  top: 99%;
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid #20b9fc;
+  clear: both;
+}
+
+
+.long_description {
+  display: none;
+}
+
+.liAnim.active {
+  font-size: 1vw;
+  cursor: auto;
+
+  .block_name {
+    font-size: 2vw;
+    margin-bottom: 10vh;
+  }
+
+  .short_description {
+    top: 50%;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+    max-width: 80%;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .short_description:after {
+    content: none;
+  }
+
+  .more {
+    display: flex;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .less {
+    cursor: pointer;
+    margin-top: 10px;
+    color: #222;
+  }
+
+  .long_description {
+    display: flex;
+    flex-direction: column;
+    max-width: 80%;
+    position: absolute;
+    top: 50%;
+    opacity: 0;
+    visibility: hidden;
+    margin-top: 50px;
+  }
+}
+
+.bubbles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
 }
 
 .bubbles ul {
-  position: absolute;
-  top: 30%;
-  left: 0;
-  width: 10%;
-  height: 100%;
+
 }
 
 .bubbles li {
-  display: flex;
-  width: 17vh;
-  height: 17vh;
-  border-radius: 50%;
-  background: radial-gradient(circle, #0b599e 0%, #002f70 100%);
-  color: white;
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  position: absolute;
-  //top: 50vh;
-  //left: 50%;
-  //transform: translate(-50%, -50%);
-  padding: 10px;
-  opacity: 0;
-  cursor: pointer;
-  display: flex;
   flex-direction: column;
+  top: 50vh;
+  left: 50%;
+  width: 17vh;
+  height: 17vh;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f3f8ff 0%, #E1E8F1 100%);
+  color: #222;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+  cursor: pointer;
 }
 

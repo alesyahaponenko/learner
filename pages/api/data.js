@@ -23,6 +23,40 @@ export default function handler(req, res) {
             'At a preliminary hearing, the trial court dismissed case for\nlack of probable cause. Defendant won.',
           color_comment: 'Color comment for block 71',
           rank: 2,
+          predictions: [
+            [
+              {
+                block_name: 'predictions1',
+                short_description: 'The case name is The People vs Hall',
+                long_description:
+                    'The case name is The People vs Hall. The case also might be referred to as the The People of the State of Colorado vs Nathan Hall',
+                color_comment: 'Color comment for block 97',
+                rank: 1,
+              },
+            ],
+            [
+              {
+                block_name: 'predictions2',
+                short_description:
+                    'its what the trial court and district court thought about the Peoples case. the Appellate and Supreme court disagreed',
+                long_description:
+                    'The trial court and district court held that the Peoples case or prosecution had a lack of probable cause to proceed against the Defendant. The Appellate disagreed and the Supreme Court applied its definition of reckless manslaughter to the case facts and found that probable cause exists.',
+                color_comment: 'Color comment for block 54',
+                rank: 3,
+              },
+            ],
+            [
+              {
+                block_name: 'predictions3',
+                short_description:
+                    'its what the trial court and district court thought about the Peoples case. the Appellate and Supreme court disagreed',
+                long_description:
+                    'The trial court and district court held that the Peoples case or prosecution had a lack of probable cause to proceed against the Defendant. The Appellate disagreed and the Supreme Court applied its definition of reckless manslaughter to the case facts and found that probable cause exists.',
+                color_comment: 'Color comment for block 54',
+                rank: 5,
+              },
+            ],
+          ]
         },
       ],
       [
