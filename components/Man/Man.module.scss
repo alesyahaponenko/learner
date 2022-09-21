@@ -1,10 +1,12 @@
 .manWrap {
   position: fixed;
-  top: 8%;
-  max-width: 40vh;
+  top: 80px;
+  max-width: 400px;
   width: 100%;
   z-index: 99;
-
+  display: flex;
+  justify-content: center;
+  margin-left: 30px;
 }
 
 .bor_r {
@@ -14,18 +16,20 @@
 
 .nameWrap {
   position: absolute;
-  top: 50%;
+  top: 40%;
   left:50%;
   transform: translate(-50%,50%);
   z-index: 9;
 }
 
 .name {
-  font-size: 1.5vw;
+  font-size: 1.2vw;
   font-weight: bold;
+  text-transform: uppercase;
 }
 
 .infoButton {
   position: absolute;
-  right: -60px;
+  right: -10px;
+  top: 10px;
 }

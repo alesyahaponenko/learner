@@ -1,5 +1,4 @@
 import styles from './Man.module.scss'
-import gsap from 'gsap'
 import ManSvg from './ManSvg/ManSvg'
 import InfoButton from '../Buttons/InfoButton/InfoButton'
 
@@ -11,7 +10,7 @@ const Man = () => {
           <ManSvg />
         </div>
         <div className={styles.nameWrap}>
-          <div className={styles.name}>GUIDE NAME</div>
+          <div className={styles.name}>Russell Lakey</div>
           <div className={styles.infoButton}>
             <InfoButton />
           </div>

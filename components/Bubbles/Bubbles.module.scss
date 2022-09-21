@@ -5,7 +5,6 @@
 
 .short_description {
   position: absolute;
-  display: none;
   bottom: 20vh;
   background: #20b9fc;
   border-radius: 10px;
@@ -36,7 +35,7 @@
   display: none;
 }
 
-.liAnim.active {
+.liAnim.big {
   font-size: 1vw;
   cursor: auto;
 
@@ -96,7 +95,12 @@
 }
 
 .bubbles ul {
-
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  //transform: translate(-50%, -50%);
 }
 
 .bubbles li {
@@ -105,15 +109,13 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  top: 50vh;
-  left: 50%;
   width: 17vh;
   height: 17vh;
   border-radius: 50%;
   background: radial-gradient(circle, #f3f8ff 0%, #E1E8F1 100%);
   color: #222;
   text-align: center;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(0.1);
   padding: 10px;
   cursor: pointer;
 }

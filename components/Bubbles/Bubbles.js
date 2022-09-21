@@ -36,34 +36,65 @@ const Bubbles = () => {
 
     setBig(q('li')[0])
     setBubbles(q('li').length)
-    q('li')[0].classList.add(`big`)
-    q('li')[0].style.zIndex = 99
 
-    let startAngle = 0
+    q('li')[0].style.zIndex = '99'
+
+    let startAngle = -90
     const angle = 360 / (bubbles - 1)
     console.log(angle)
     const rad = Math.PI / 180
 
     tl_intro.current = gsap.timeline({
       paused: true,
+      delay:2,
       onComplete: () => dispatch(stopMoveBubblesToStartPositions()),
     })
 
+    tl_intro.current.fromTo(
+        q('li')[0],
+        {
+          top: '230px',
+          left: '250px',
+          width: '17vh',
+          height: '17vh'
+        },
+        {
+          top: '50%',
+          left: '50%',
+          width: '30vh',
+          height: '30vh',
+          duration: 1,
+          scale: 1,
+          ease: 'back',
+          onComplete: ()=>q('li')[0].classList.add(`big`)
+        }
+    )
     for (let i = 1; i < bubbles; i++) {
       console.log('i', i, 'startAngle', startAngle)
       q('li')[i].classList.add(`${i}`)
 
-      gsap.to(
+      tl_intro.current.fromTo(
         q('li')[i],
+          {
+            top: '230px',
+            left: '250px',
+            width: '17vh',
+            height: '17vh'
+          },
         {
-          x: vh(30) * Math.cos(startAngle * rad),
-          y: vh(30) * Math.sin(startAngle * rad),
+          x: (vh(28)) * Math.cos(startAngle * rad),
+          y: (vh(28)) * Math.sin(startAngle * rad),
+          top: '50%',
+          left: '50%',
+          scale: 1,
           duration: 1,
+          ease: 'back'
         },
         i / 6
       )
       startAngle += angle
     }
+    tl_intro.current.play()
   }, [bubbles])
 
   useEffect(() => {
@@ -72,8 +103,8 @@ const Bubbles = () => {
       {
         x:0,
         y:0,
-        width: '40vh',
-        height: '40vh',
+        width: '30vh',
+        height: '30vh',
         duration: 1,
       }
     )
@@ -126,11 +157,11 @@ const Bubbles = () => {
       duration: 0.5,
     })
     if (!e.target.classList.contains('active')) {
-      tl_hover.current.play()
+     // tl_hover.current.play()
     }
   }
   const hoverBubbleStop = () => {
-    tl_hover.current.reverse()
+   // tl_hover.current.reverse()
   }
 
   const clickMore = () => {
@@ -163,20 +194,20 @@ const Bubbles = () => {
                 onClick={clickBubble}
                 onMouseEnter={hoverBubble}
                 onMouseLeave={hoverBubbleStop}
-                className={'liAnim'}
+                className={styles.liAnim + ' liAnim'}
               >
-                <div className="block_name">{el[0].block_name}</div>
+                <div className={styles.block_name + ' block_name'}>{el[0].block_name}</div>
 
-                <div className="short_description">
+                <div className={styles.short_description + 'short_description'}>
                   {/*{el[0].short_description}*/}
-                  <div className="more" onClick={clickMore}>
+                  <div className={styles.more + ' more'} onClick={clickMore}>
                     more...
                   </div>
                 </div>
 
-                <div className="long_description">
+                <div className={styles.long_description + ' long_description'}>
                   {/*{el[0].long_description}*/}
-                  <div className="less" onClick={clickLess}>
+                  <div className={styles.less + ' less'} onClick={clickLess}>
                     less...
                   </div>
                 </div>
@@ -189,3 +220,5 @@ const Bubbles = () => {
 }
 
 export default Bubbles
+
+

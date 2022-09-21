@@ -22,10 +22,10 @@ export const bubblesSlice = createSlice({
   },
 
   reducers: {
-    starMouthtAnimation: (state) => {
+    startMouthAnimation: (state) => {
       return { ...state, startManAnimation: 1 }
     },
-    stopMouthtAnimation: (state) => {
+    stopMouthAnimation: (state) => {
       return { ...state, startManAnimation: 0 }
     },
     setMouseCoordinate: (state, { payload }) => {
@@ -54,6 +54,6 @@ export const bubblesSlice = createSlice({
   },
 })
 
-export const { starMouthtAnimation, stopMouthtAnimation, setMouseCoordinate, startMoveBubblesToStartPositions, stopMoveBubblesToStartPositions } = bubblesSlice.actions
+export const { startMouthAnimation, stopMouthAnimation, setMouseCoordinate, startMoveBubblesToStartPositions, stopMoveBubblesToStartPositions } = bubblesSlice.actions
 
 export default bubblesSlice.reducer

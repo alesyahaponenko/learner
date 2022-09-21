@@ -28,7 +28,7 @@ const Home = () => {
       {bubbles.loaded && (
         <div className="main">
           <div className={styles.title}>
-            KNOWZEE TITLE
+            The People vs Hall (Mens Rea)
             <div className={styles.infoButton}>
               <InfoButton />
             </div>

@@ -10,11 +10,12 @@ const CoachingPanel = () => {
           You're almost there, <br />
           you're about to get this badge
         </div>
-      </div>
         <span>
           <LampButton />
           <UserButton />
         </span>
+      </div>
+
     </>
   )
 }
