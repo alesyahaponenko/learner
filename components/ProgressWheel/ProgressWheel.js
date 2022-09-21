@@ -16,6 +16,7 @@ const ProgressWheel = () => {
                 src="/wheel.png"
                 width={300}
                 height={300}
+                alt=''
             />
         </div>
     )

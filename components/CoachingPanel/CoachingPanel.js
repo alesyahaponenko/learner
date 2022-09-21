@@ -7,8 +7,8 @@ const CoachingPanel = () => {
     <>
       <div className={styles.wrap}>
         <div className={styles.textP}>
-          You're almost there, <br />
-          you're about to get this badge
+          You&apos;re almost there, <br />
+          you&apos;re about to get this badge
         </div>
         <span>
           <LampButton />

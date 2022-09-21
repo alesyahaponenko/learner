@@ -52,10 +52,10 @@ const Chat = () => {
     <>
       <div className={styles.tube + ' tube'}>
         <div className={styles.tube_bg}>
-          <Image src="/tube.png" width={250} height={331} />
+          <Image src="/tube.png" alt='' width={250} height={331} />
         </div>
         <div className={styles.tube_ball + ' tube_ball'}>
-          <Image src="/tube_ball.png" width={250} height={331} />
+          <Image src="/tube_ball.png" alt='' width={250} height={331} />
         </div>
       </div>
       <div className={styles.chatWrap} >
