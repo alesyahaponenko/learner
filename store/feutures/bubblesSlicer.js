@@ -10,11 +10,33 @@ export const fetchData = createAsyncThunk('bubbles/getData', async (arg, { rejec
   }
 })
 
+// export const fetchData = createAsyncThunk('bubbles/getData', async (arg, { rejectWithValue }) => {
+//   try {
+//     const data = await axios
+//         .post('http://34.123.173.148', {
+//           sender: 'test_client',
+//           query: 'Recklessness',
+//         })
+//         .then(function (response) {
+//           console.log(response)
+//         })
+//         .catch(function (error) {
+//           console.log(error)
+//         })
+//     // console.log(data)
+//     // return data
+//   } catch (error) {
+//     rejectWithValue(error.response.data)
+//   }
+// })
+
+
 export const bubblesSlice = createSlice({
   name: 'bubbles',
   initialState: {
     loaded: false,
     startManAnimation: 0,
+    startBubblesAnimation: 0,
     moveBubblesToStartPositions: 1,
     mouseCoordinate: { x: 0, y: 0 },
     predictions: [],
@@ -27,6 +49,9 @@ export const bubblesSlice = createSlice({
     },
     stopMouthAnimation: (state) => {
       return { ...state, startManAnimation: 0 }
+    },
+    startBubblesMoves: (state) => {
+      return { ...state, startBubblesAnimation: 1 }
     },
     setMouseCoordinate: (state, { payload }) => {
       return { ...state, mouseCoordinate: { x: payload.x, y: payload.y } }
@@ -54,6 +79,13 @@ export const bubblesSlice = createSlice({
   },
 })
 
-export const { startMouthAnimation, stopMouthAnimation, setMouseCoordinate, startMoveBubblesToStartPositions, stopMoveBubblesToStartPositions } = bubblesSlice.actions
+export const {
+  startMouthAnimation,
+  stopMouthAnimation,
+  setMouseCoordinate,
+  startMoveBubblesToStartPositions,
+  stopMoveBubblesToStartPositions,
+  startBubblesMoves,
+} = bubblesSlice.actions
 
 export default bubblesSlice.reducer

@@ -1,11 +1,13 @@
 import styles from './Bubbles.module.scss'
 import gsap from 'gsap'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { stopMoveBubblesToStartPositions } from '../../store/feutures/bubblesSlicer'
 
 const Bubbles = () => {
-  const { predictions, loaded, moveBubblesToStartPositions } = useSelector((state) => state.bubbles)
+  const { predictions, loaded, startBubblesAnimation, moveBubblesToStartPositions } = useSelector(
+    (state) => state.bubbles
+  )
   const dispatch = useDispatch()
 
   const el = useRef()
@@ -29,85 +31,86 @@ const Bubbles = () => {
     nullTargetWarn: false,
   })
 
-  useEffect(() => {
+  // intro
+  useLayoutEffect(() => {
     if (!loaded) return
     const vh = (coef) => window.innerHeight * (coef / 100)
     const vw = (coef) => window.innerWidth * (coef / 100)
 
     setBig(q('li')[0])
     setBubbles(q('li').length)
-
     q('li')[0].style.zIndex = '99'
 
     let startAngle = -90
     const angle = 360 / (bubbles - 1)
-    console.log(angle)
     const rad = Math.PI / 180
 
     tl_intro.current = gsap.timeline({
       paused: true,
-      delay:2,
       onComplete: () => dispatch(stopMoveBubblesToStartPositions()),
     })
 
     tl_intro.current.fromTo(
-        q('li')[0],
-        {
-          top: '230px',
-          left: '250px',
-          width: '17vh',
-          height: '17vh'
+      q('li')[0],
+      {
+        top: '10vh',
+        left: '4vw',
+        width: '17vh',
+        height: '17vh',
+      },
+      {
+        top: '50%',
+        left: '50%',
+        width: '30vh',
+        height: '30vh',
+        duration: 1,
+        scale: 1,
+        ease: 'back',
+        onStart: () => {
+          q('li')[0].style.zIndex = 'auto'
+          q('li')[0].classList.add(`active`)
         },
-        {
-          top: '50%',
-          left: '50%',
-          width: '30vh',
-          height: '30vh',
-          duration: 1,
-          scale: 1,
-          ease: 'back',
-          onComplete: ()=>q('li')[0].classList.add(`big`)
-        }
+      }
     )
     for (let i = 1; i < bubbles; i++) {
       console.log('i', i, 'startAngle', startAngle)
-      q('li')[i].classList.add(`${i}`)
+
+      q('li')[i].classList.add(`li${i}`)
 
       tl_intro.current.fromTo(
         q('li')[i],
-          {
-            top: '230px',
-            left: '250px',
-            width: '17vh',
-            height: '17vh'
-          },
         {
-          x: (vh(28)) * Math.cos(startAngle * rad),
-          y: (vh(28)) * Math.sin(startAngle * rad),
+          top: '15vh',
+          left: '10vw',
+          width: '17vh',
+          height: '17vh',
+        },
+        {
+          x: vh(28) * Math.cos(startAngle * rad),
+          y: vh(28) * Math.sin(startAngle * rad),
           top: '50%',
           left: '50%',
           scale: 1,
           duration: 1,
-          ease: 'back'
+          ease: 'back',
         },
         i / 6
       )
       startAngle += angle
     }
-    tl_intro.current.play()
-  }, [bubbles])
+    if (startBubblesAnimation) {
+      tl_intro.current.play()
+    }
+  }, [startBubblesAnimation])
 
   useEffect(() => {
-    gsap.to(
-      big,
-      {
-        x:0,
-        y:0,
-        width: '30vh',
-        height: '30vh',
-        duration: 1,
-      }
-    )
+    gsap.to(big, {
+      x: 0,
+      y: 0,
+      width: '30vh',
+      height: '30vh',
+      duration: 1,
+    })
 
     // gsap.to(
     //     bubbles,
@@ -157,11 +160,11 @@ const Bubbles = () => {
       duration: 0.5,
     })
     if (!e.target.classList.contains('active')) {
-     // tl_hover.current.play()
+      tl_hover.current.play()
     }
   }
   const hoverBubbleStop = () => {
-   // tl_hover.current.reverse()
+    tl_hover.current.reverse()
   }
 
   const clickMore = () => {
@@ -198,15 +201,15 @@ const Bubbles = () => {
               >
                 <div className={styles.block_name + ' block_name'}>{el[0].block_name}</div>
 
-                <div className={styles.short_description + 'short_description'}>
-                  {/*{el[0].short_description}*/}
+                <div className={styles.short_description + ' short_description'}>
+                  {el[0].short_description}
                   <div className={styles.more + ' more'} onClick={clickMore}>
                     more...
                   </div>
                 </div>
 
                 <div className={styles.long_description + ' long_description'}>
-                  {/*{el[0].long_description}*/}
+                  {el[0].long_description}
                   <div className={styles.less + ' less'} onClick={clickLess}>
                     less...
                   </div>

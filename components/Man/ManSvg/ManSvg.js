@@ -3,7 +3,7 @@ import styles from './ManSvg.module.scss'
 import gsap from 'gsap'
 import { MorphSVGPlugin } from 'gsap/dist/MorphSVGPlugin'
 import { useDispatch, useSelector } from 'react-redux'
-import {startMoveBubblesToStartPositions, stopMouthAnimation} from '../../../store/feutures/bubblesSlicer'
+import {startBubblesMoves, stopMouthAnimation} from '../../../store/feutures/bubblesSlicer'
 
 gsap.registerPlugin(MorphSVGPlugin)
 
@@ -22,7 +22,7 @@ const Icon = () => {
       repeat: 2,
       onComplete: () => {
         dispatch(stopMouthAnimation(0))
-        dispatch(startMoveBubblesToStartPositions())
+        dispatch(startBubblesMoves(1))
       },
 
     })

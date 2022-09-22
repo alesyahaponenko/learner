@@ -10,6 +10,7 @@
   border-radius: 10px;
   padding: 15px;
   width: 135%;
+  display: none;
 
   .more {
     display: none;
@@ -35,54 +36,7 @@
   display: none;
 }
 
-.liAnim.big {
-  font-size: 1vw;
-  cursor: auto;
 
-  .block_name {
-    font-size: 2vw;
-    margin-bottom: 10vh;
-  }
-
-  .short_description {
-    top: 50%;
-    background: transparent;
-    border-radius: 0;
-    padding: 0;
-    max-width: 80%;
-    width: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .short_description:after {
-    content: none;
-  }
-
-  .more {
-    display: flex;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-
-  .less {
-    cursor: pointer;
-    margin-top: 10px;
-    color: #222;
-  }
-
-  .long_description {
-    display: flex;
-    flex-direction: column;
-    max-width: 80%;
-    position: absolute;
-    top: 50%;
-    opacity: 0;
-    visibility: hidden;
-    margin-top: 50px;
-  }
-}
 
 .bubbles {
   position: fixed;
@@ -115,7 +69,7 @@
   background: radial-gradient(circle, #f3f8ff 0%, #E1E8F1 100%);
   color: #222;
   text-align: center;
-  transform: translate(-50%, -50%) scale(0.1);
+  transform: translate(-50%, -50%) scale(0);
   padding: 10px;
   cursor: pointer;
 }

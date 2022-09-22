@@ -1,28 +1,15 @@
-.chatStartButton {
-  border-radius: 40px;
-  min-height: 50px;
-  padding: 20px 30px;
-  background: #0b599e;
-  cursor: pointer;
-  color: #ffffff;
-  font-size: 1.5vw;
-  font-weight: bold;
-  position: fixed;
-  bottom: 50px;
-  left: 50px;
-  z-index: 99;
-}
 .form {
   width: 100%;
 }
+
 .chatWrap {
   position: fixed;
-  bottom: 30px;
-  left: 30px;
+  bottom: 2.5vh;
+  left: 2.5vh;
   text-align: center;
   border-radius: 20px;
-  width: 400px;
-  height: 500px;
+  width: 20vw;
+  height: 45vh;
   background: #fff;
   z-index: 9999;
   border: 1px solid #00000020;
@@ -30,7 +17,7 @@
 
 .closeModal {
   width: 100%;
-  height: 50px;
+  height: 4.5vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,7 +25,7 @@
 
 .chatInner {
   width: 100%;
-  height: calc(100% - 50px);
+  height: calc(100% - 4.5vh);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -47,11 +34,11 @@
 }
 
 .inputField {
-  min-height: 60px;
-  margin: 20px auto;
+  height: 5.5vh;
+  margin: 2vh auto;
   border: 1px solid #7ac6e7;
   border-radius: 40px;
-  padding: 20px;
+  padding: 2vh;
   background: #f5fcff;
   transition: 0.3s;
   width: 100%;
@@ -67,12 +54,11 @@
 
 .btn {
   color: white;
-  padding: 10px 84px;
   background: #20b9fc;
   cursor: pointer;
   text-align: center;
-  border-radius: 40px;
-  height: 60px;
+  border-radius: 4vh;
+  height: 5.5vh;
   font-weight: bold;
   font-size: 1.5vw;
   width: 100%;
@@ -89,8 +75,8 @@
 .textMessage {
   background: #f5fcff;
   width: 100%;
-  padding: 20px 20px;
-  margin: 20px 0;
+  padding: 2vh;
+  margin: 2vh 0;
   border-radius: 6px;
   font-size: 1vw;
   position: relative;
@@ -109,15 +95,45 @@
 
 .tube {
   position: absolute;
-  top: 28vh;
-  left: 100px;
-}
-.tube_bg {
+  top: 25vh;
+  max-width: 20vw;
+  left: 2.5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+
+
+  @media screen and (max-height: 950px) {
+    top: 25vh;
+  }
+  @media screen and (max-height: 800px) {
+    top: 28vh;
+  }
 
 }
+
+.tube_bg {
+  position: absolute;
+  top: 5vh;
+  left: 50%;
+  transform: translate(-50%, 0px);
+  z-index: 9;
+}
+
 .tube_ball {
   position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
+  top: 13vh;
+  left: 50%;
+  opacity: 1;
+  transform: translate(-50%, 0px);
+  z-index: 9;
+
+  @media screen and (max-height: 900px) {
+    top: 12vh;
+  }
+  @media screen and (max-height: 800px) {
+    top: 5vh;
+  }
 }

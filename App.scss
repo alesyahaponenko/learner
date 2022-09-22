@@ -43,9 +43,69 @@ body {
 }
 
 
-
 li {
   list-style: none;
 }
 
 
+.liAnim.active {
+  font-size: 1vw;
+  cursor: auto;
+  z-index: 99;
+
+  .block_name {
+    font-size: 1.5vw;
+    margin-bottom: 10vh;
+  }
+
+  .short_description {
+    top: 50%;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+    max-width: 80%;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .short_description:after {
+    content: none;
+  }
+
+  .more {
+    display: flex;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .less {
+    cursor: pointer;
+    margin-top: 10px;
+    color: #222;
+  }
+
+  .long_description {
+    display: flex;
+    flex-direction: column;
+    max-width: 80%;
+    position: absolute;
+    top: 50%;
+    opacity: 0;
+    visibility: hidden;
+    margin-top: 2.7vh;
+  }
+}
+
+.liAnim.li6 {
+  z-index: 4;
+}
+
+.liAnim.li7 {
+  z-index: 3;
+}
+
+.liAnim.li8 {
+  z-index: 2;
+}

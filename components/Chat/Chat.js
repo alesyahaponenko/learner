@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import styles from './Chat.module.scss'
 import gsap from 'gsap'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { startMouthAnimation } from '../../store/feutures/bubblesSlicer'
 import Image from 'next/image'
 
@@ -25,41 +25,64 @@ const Chat = () => {
     setId(id + 1)
     setNewMessage('')
     chatMessage.push({ id: id, text: newMessage, date: new Date().toLocaleString() })
-    dispatch(startMouthAnimation(1))
+
     tl_Ball.current.restart()
   }
 
   useEffect(() => {
-
-    tl_Ball.current = gsap.timeline({ paused: true })
-    tl_Ball.current.to(".tube_ball", {
-      opacity:1,
+    tl_Ball.current = gsap.timeline({
+      paused: true,
+      onComplete: () => dispatch(startMouthAnimation(1)),
     })
-    tl_Ball.current.to(".tube_ball", {
-      top:'-200px',
-      duration:0.5
+    tl_Ball.current.fromTo('.tube', { opacity: '0' }, {opacity: '1', duration:0.1})
+    tl_Ball.current.fromTo('.tube', { y: '30vh' }, {y: '0vh', duration: 0.3})
+    tl_Ball.current.to('.tube_ball', {
+      opacity: 1,
     })
-    tl_Ball.current.to(".tube_ball", {
-      scaleY: 0,
-      duration:0.1,
-      top:'-320px',
-      opacity:0,
-      transformOrigin: '0% 100%'
-    },"<+=0.38")
+    tl_Ball.current.to('.tube_ball', {
+      top: () =>
+        window.innerHeight > 1000
+          ? '-12vh'
+          : window.innerHeight < 1000
+          ? '-11vh'
+          : window.innerHeight < 800
+          ? '-50vh'
+          : 0,
+      duration: 0.5,
+    }, "<+=0.25")
+    tl_Ball.current.to(
+      '.tube_ball',
+      {
+        duration: 0.8,
+        top: () =>
+          window.innerHeight > 1000
+            ? '-11vh'
+            : window.innerHeight < 1000
+            ? '-12vh'
+            : window.innerHeight < 800
+            ? '-20vh'
+            : 0,
+        opacity: 0,
+        transformOrigin: '0% 100%',
+      },
+      '<+=0.38'
+    )
+    tl_Ball.current.to('.tube', {y: '30vh', duration: 0.3})
+    tl_Ball.current.to('.tube', { opacity: '0', duration:0.1})
   }, [])
 
   return (
     <>
       <div className={styles.tube + ' tube'}>
         <div className={styles.tube_bg}>
-          <Image src="/tube.png" alt='' width={250} height={331} />
+          <Image src="/tube.png" alt="" width={250} height={331} />
         </div>
         <div className={styles.tube_ball + ' tube_ball'}>
-          <Image src="/tube_ball.png" alt='' width={250} height={331} />
+          <Image src="/tube_ball.png" alt="" width={250} height={331} />
         </div>
       </div>
-      <div className={styles.chatWrap} >
-        <div className={styles.closeModal} >
+      <div className={styles.chatWrap}>
+        <div className={styles.closeModal}>
           <span>Conversation</span>
         </div>
         <div className={styles.chatInner} ref={chatInner}>
