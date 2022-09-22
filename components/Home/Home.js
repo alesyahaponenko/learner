@@ -21,8 +21,8 @@ const Home = () => {
   return (
     <div className="inner">
       {!bubbles.loaded && (
-        <div className="loading">
-          <div>loading</div>
+        <div className={styles.loading}>
+          <div className={styles.txt}>loading...</div>
         </div>
       )}
       {bubbles.loaded && (

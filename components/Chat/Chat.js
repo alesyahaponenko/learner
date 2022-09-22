@@ -32,24 +32,31 @@ const Chat = () => {
   useEffect(() => {
     tl_Ball.current = gsap.timeline({
       paused: true,
-      onComplete: () => dispatch(startMouthAnimation(1)),
+      onComplete: () => {
+        dispatch(startMouthAnimation(1))
+      },
     })
-    tl_Ball.current.fromTo('.tube', { opacity: '0' }, {opacity: '1', duration:0.1})
-    tl_Ball.current.fromTo('.tube', { y: '30vh' }, {y: '0vh', duration: 0.3})
+
+    tl_Ball.current.fromTo('.tube', { opacity: '0' }, { opacity: '1', duration: 0.1 })
+    tl_Ball.current.fromTo('.tube', { y: '30vh' }, { y: '0vh', duration: 0.3 })
     tl_Ball.current.to('.tube_ball', {
       opacity: 1,
     })
-    tl_Ball.current.to('.tube_ball', {
-      top: () =>
-        window.innerHeight > 1000
-          ? '-12vh'
-          : window.innerHeight < 1000
-          ? '-11vh'
-          : window.innerHeight < 800
-          ? '-50vh'
-          : 0,
-      duration: 0.5,
-    }, "<+=0.25")
+    tl_Ball.current.to(
+      '.tube_ball',
+      {
+        top: () =>
+          window.innerHeight > 1000
+            ? '-12vh'
+            : window.innerHeight < 1000
+            ? '-11vh'
+            : window.innerHeight < 800
+            ? '-50vh'
+            : 0,
+        duration: 0.5,
+      },
+      '<+=0.25'
+    )
     tl_Ball.current.to(
       '.tube_ball',
       {
@@ -67,8 +74,8 @@ const Chat = () => {
       },
       '<+=0.38'
     )
-    tl_Ball.current.to('.tube', {y: '30vh', duration: 0.3})
-    tl_Ball.current.to('.tube', { opacity: '0', duration:0.1})
+    tl_Ball.current.to('.tube', { y: '30vh', duration: 0.3 })
+    tl_Ball.current.to('.tube', { opacity: '0', duration: 0.1 })
   }, [])
 
   return (

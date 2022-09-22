@@ -5,10 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { stopMoveBubblesToStartPositions } from '../../store/feutures/bubblesSlicer'
 
 const Bubbles = () => {
-  const { predictions, loaded, startBubblesAnimation, moveBubblesToStartPositions } = useSelector(
-    (state) => state.bubbles
-  )
+  const { predictions, loaded, startBubblesAnimation } = useSelector((state) => state.bubbles)
   const dispatch = useDispatch()
+
+  const [predictions_sorted, setPredictions_sorted] = useState(null)
 
   const el = useRef()
   const q = gsap.utils.selector(el)
@@ -21,25 +21,26 @@ const Bubbles = () => {
   const [big, setBig] = useState(null)
   const [elSmall, setElSmall] = useState(null)
 
-  const predictions_copy = [...predictions]
-  const predictions_sorted = predictions_copy.sort(function (a, b) {
-    return a[0].rank - b[0].rank
-  })
-
   gsap.config({
     force3D: false,
     nullTargetWarn: false,
   })
-
+  useEffect(() => {
+    const predictions_copy = [...predictions]
+    setPredictions_sorted(
+      predictions_copy.sort(function (a, b) {
+        return a.rank - b.rank
+      })
+    )
+  }, [predictions])
   // intro
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!loaded) return
     const vh = (coef) => window.innerHeight * (coef / 100)
     const vw = (coef) => window.innerWidth * (coef / 100)
 
     setBig(q('li')[0])
     setBubbles(q('li').length)
-    q('li')[0].style.zIndex = '99'
 
     let startAngle = -90
     const angle = 360 / (bubbles - 1)
@@ -73,7 +74,6 @@ const Bubbles = () => {
       }
     )
     for (let i = 1; i < bubbles; i++) {
-      console.log('i', i, 'startAngle', startAngle)
 
       q('li')[i].classList.add(`li${i}`)
 
@@ -101,7 +101,7 @@ const Bubbles = () => {
     if (startBubblesAnimation) {
       tl_intro.current.play()
     }
-  }, [startBubblesAnimation])
+  }, [startBubblesAnimation,loaded, big])
 
   useEffect(() => {
     gsap.to(big, {
@@ -197,19 +197,19 @@ const Bubbles = () => {
                 onClick={clickBubble}
                 onMouseEnter={hoverBubble}
                 onMouseLeave={hoverBubbleStop}
-                className={styles.liAnim + ' liAnim'}
+                className={'liAnim'}
               >
-                <div className={styles.block_name + ' block_name'}>{el[0].block_name}</div>
+                <div className={styles.block_name + ' block_name'}>{el.block_name}</div>
 
                 <div className={styles.short_description + ' short_description'}>
-                  {el[0].short_description}
+                  {el.short_description}
                   <div className={styles.more + ' more'} onClick={clickMore}>
                     more...
                   </div>
                 </div>
 
                 <div className={styles.long_description + ' long_description'}>
-                  {el[0].long_description}
+                  {el.long_description}
                   <div className={styles.less + ' less'} onClick={clickLess}>
                     less...
                   </div>

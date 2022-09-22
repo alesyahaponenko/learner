@@ -1,40 +1,41 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-export const fetchData = createAsyncThunk('bubbles/getData', async (arg, { rejectWithValue }) => {
-  try {
-    const data = await axios.get('/api/data')
-    return data
-  } catch (error) {
-    rejectWithValue(error.response.data)
-  }
-})
-
 // export const fetchData = createAsyncThunk('bubbles/getData', async (arg, { rejectWithValue }) => {
 //   try {
-//     const data = await axios
-//         .post('http://34.123.173.148', {
-//           sender: 'test_client',
-//           query: 'Recklessness',
-//         })
-//         .then(function (response) {
-//           console.log(response)
-//         })
-//         .catch(function (error) {
-//           console.log(error)
-//         })
-//     // console.log(data)
-//     // return data
+//     const data = await axios.get('/api/data')
+//     return data
 //   } catch (error) {
 //     rejectWithValue(error.response.data)
 //   }
 // })
-
+export const fetchData = createAsyncThunk(
+  'bubbles/getData',
+  async (payload, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        //'https://frozen-stream-26546.herokuapp.com/http://34.123.173.148',
+        'http://34.123.173.148',
+        {
+          sender: 'test_client',
+          query: 'Recklessness',
+        }
+      )
+      return response
+    } catch (err) {
+      if (!err.response) {
+        throw err
+      }
+      return rejectWithValue(err.response)
+    }
+  }
+)
 
 export const bubblesSlice = createSlice({
   name: 'bubbles',
   initialState: {
     loaded: false,
+    audio: undefined,
     startManAnimation: 0,
     startBubblesAnimation: 0,
     moveBubblesToStartPositions: 1,
@@ -71,6 +72,7 @@ export const bubblesSlice = createSlice({
     builder.addCase(fetchData.fulfilled, (state, { payload }) => {
       state.loaded = true
       state.predictions = payload.data.predictions
+      state.audio = payload.data.predictions[0].audio.gcp_audio_filename
     })
     builder.addCase(fetchData.rejected, (state, { payload }) => {
       state.message = payload
