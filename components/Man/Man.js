@@ -1,8 +1,11 @@
 import styles from './Man.module.scss'
 import ManSvg from './ManSvg/ManSvg'
 import InfoButton from '../Buttons/InfoButton/InfoButton'
+import {useGetAvatarInfoQuery} from "../../store/feutures/avatarApi";
 
 const Man = () => {
+  const { data = {}, error, isLoading } = useGetAvatarInfoQuery('')
+
   return (
     <>
       <div className={styles.manWrap}>
@@ -12,7 +15,7 @@ const Man = () => {
         <div className={styles.nameWrap}>
           <div className={styles.name}>Russell Lakey</div>
           <div className={styles.infoButton}>
-            <InfoButton />
+              <InfoButton data={data} isLoading={isLoading} error={error} />
           </div>
         </div>
       </div>

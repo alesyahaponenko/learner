@@ -38,7 +38,16 @@ const Chat = () => {
     })
 
     tl_Ball.current.fromTo('.tube', { opacity: '0' }, { opacity: '1', duration: 0.1 })
-    tl_Ball.current.fromTo('.tube', { y: '30vh' }, { y: '0vh', duration: 0.3 })
+    tl_Ball.current.fromTo('.tube', { y: '30vh' }, {
+      y: () =>
+          window.innerHeight > 1000
+              ? '12vh'
+              : (window.innerHeight < 1000 &&  window.innerHeight > 800)
+              ? '12vh'
+              : window.innerHeight < 800
+                  ? '10vh'
+                  : 0,
+      duration: 0.3 })
     tl_Ball.current.to('.tube_ball', {
       opacity: 1,
     })
@@ -47,9 +56,9 @@ const Chat = () => {
       {
         top: () =>
           window.innerHeight > 1000
-            ? '-12vh'
+            ? '-10vh'
             : window.innerHeight < 1000
-            ? '-11vh'
+            ? '-9vh'
             : window.innerHeight < 800
             ? '-50vh'
             : 0,
@@ -61,14 +70,6 @@ const Chat = () => {
       '.tube_ball',
       {
         duration: 0.8,
-        top: () =>
-          window.innerHeight > 1000
-            ? '-11vh'
-            : window.innerHeight < 1000
-            ? '-12vh'
-            : window.innerHeight < 800
-            ? '-20vh'
-            : 0,
         opacity: 0,
         transformOrigin: '0% 100%',
       },

@@ -20,12 +20,6 @@ const Home = () => {
 
   return (
     <div className="inner">
-      {!bubbles.loaded && (
-        <div className={styles.loading}>
-          <div className={styles.txt}>loading...</div>
-        </div>
-      )}
-      {bubbles.loaded && (
         <div className="main">
           <div className={styles.title}>
             The People vs Hall (Mens Rea)
@@ -44,7 +38,6 @@ const Home = () => {
             <CoachingPanel />
           </div>
         </div>
-      )}
     </div>
   )
 }

@@ -34,3 +34,29 @@
     text-transform: lowercase;
   }
 }
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width:50vw;
+  height: auto;
+  background: #FFFFFF;
+  border: 1px solid #0C0D0D;
+  z-index: 99;
+  border-radius: 4vh;
+  padding: 2vh 5vh;
+  opacity: 0;
+  visibility: hidden;
+}
+.modal_inner {
+  display: flex;
+  flex-direction: column;
+}
+.title {
+  font-size: 1.2vw;
+  margin: 20px 0;
+}
+.description {
+
+}

@@ -15,7 +15,7 @@ const Bubbles = () => {
   const tl_intro = useRef(null)
   const tl_more = useRef(null)
   const tl_hover = useRef(null)
-  const tl_changeBubbles = useRef(null)
+  const tl_moveDown = useRef(null)
 
   const [bubbles, setBubbles] = useState(null)
   const [big, setBig] = useState(null)
@@ -43,7 +43,8 @@ const Bubbles = () => {
     setBubbles(q('li').length)
 
     let startAngle = -90
-    const angle = 360 / (bubbles - 1)
+    const length = q('li').length
+    const angle = 360 / (length - 1)
     const rad = Math.PI / 180
 
     tl_intro.current = gsap.timeline({
@@ -73,8 +74,8 @@ const Bubbles = () => {
         },
       }
     )
-    for (let i = 1; i < bubbles; i++) {
 
+    for (let i = 1; i < length; i++) {
       q('li')[i].classList.add(`li${i}`)
 
       tl_intro.current.fromTo(
@@ -88,8 +89,8 @@ const Bubbles = () => {
         {
           x: vh(28) * Math.cos(startAngle * rad),
           y: vh(28) * Math.sin(startAngle * rad),
-          top: '50%',
-          left: '50%',
+          top: '50vh',
+          left: '50vw',
           scale: 1,
           duration: 1,
           ease: 'back',
@@ -97,11 +98,13 @@ const Bubbles = () => {
         i / 6
       )
       startAngle += angle
+      console.log('i', i, 'startAngle', startAngle)
     }
+
     if (startBubblesAnimation) {
       tl_intro.current.play()
     }
-  }, [startBubblesAnimation,loaded, big])
+  }, [startBubblesAnimation, loaded])
 
   useEffect(() => {
     gsap.to(big, {
@@ -112,40 +115,59 @@ const Bubbles = () => {
       duration: 1,
     })
 
-    // gsap.to(
-    //     bubbles,
-    //     {
-    //        x: vh(30) * Math.cos(startAngle * rad),
-    //        y: vh(30) * Math.sin(startAngle * rad),
-    //       width: '40vh',
-    //       height: '40vh',
-    //       duration: 1,
-    //     }
-    // )
+    // tl_moveDown.current = gsap.timeline({paused: true})
+    // const vh = (coef) => window.innerHeight * (coef / 100)
+
+    // for (let i = 0; i < q('li').length; i++) {
+    //   if (!q('li')[i].classList.contains('active')) {
+    //     tl_moveDown.current.to(
+    //         q('li')[i],
+    //       {
+    //         y: vh(0),
+    //         top: '50vh',
+    //         left: '50vw',
+    //         scale: 1,
+    //         duration: 1,
+    //       },
+    //       i / 6
+    //     )
+    //   }
+    // }
+    // if (big) {
+    //   tl_moveDown.current.play()
+    // }
   }, [big])
 
   const clickBubble = (e) => {
     if (e.target.classList.contains('active') || !e.target.classList.contains('liAnim')) return
+    let all = q('li')
+    all.forEach((el) => {
+      el.classList.remove('active')
+    })
+    e.target.classList.add('active')
     const vh = (coef) => window.innerHeight * (coef / 100)
 
     //setElSmall(e.target)
     setBig(e.target)
 
-    // let startAngle = 0
-    // const angle = 360 / (bubbles - 1)
-    // console.log(angle)
-    // const rad = Math.PI / 180
-    //
-    // for (let i = 1; i < bubbles; i++) {
-    //   if (e.target.querySelector('.block_name').innerHTML) {
-    //     gsap.timeline().to(q('li'), {
-    //       x: vh(30) * Math.cos(startAngle * rad),
-    //       y: vh(30) * Math.sin(startAngle * rad),
-    //       duration: 1,
-    //       stagger: 0.1,
-    //     })
-    //   }
-    // }
+    // will be used in future
+
+    let startAngle = -90
+    const length = q('li').length
+    const angle = 360 / (length - 1)
+    const rad = Math.PI / 180
+
+    for (let i = 1; i < bubbles; i++) {
+      if (e.target.querySelector('.block_name').innerHTML) {
+        gsap.timeline().to(q('li'), {
+          x: vh(30) * Math.cos(startAngle * rad),
+          y: vh(30) * Math.sin(startAngle * rad),
+          duration: 1,
+          stagger: 0.1,
+        })
+      }
+      startAngle += angle
+    }
   }
 
   const hoverBubble = (e) => {

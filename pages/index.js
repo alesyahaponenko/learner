@@ -12,8 +12,8 @@ function App() {
 
   function handleMouseMove(ev) {
     setMousePosition({
-      x:  ev.pageX / 260,
-      y: -(window.innerHeight / 2 - ev.pageY) / 160,
+      x:  ev.pageX / 1000,
+      y: -(window.innerHeight / 2 - ev.pageY) / 800,
     })
     dispatch(setMouseCoordinate({ x:mousePosition.x, y:mousePosition.y }))
   }
