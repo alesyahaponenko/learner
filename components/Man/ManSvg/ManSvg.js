@@ -3,13 +3,13 @@ import styles from './ManSvg.module.scss'
 import gsap from 'gsap'
 import { MorphSVGPlugin } from 'gsap/dist/MorphSVGPlugin'
 import { useDispatch, useSelector } from 'react-redux'
-import { startBubblesMoves, stopMouthAnimation } from '../../../store/feutures/bubblesSlicer'
+import { startBubblesAnimation, stopMouthAnimation } from '../../../store/feutures/bubblesSlicer'
 
 gsap.registerPlugin(MorphSVGPlugin)
 
 const Icon = () => {
   const tl_Mouth = useRef(null)
-  const { startManAnimation, mouseCoordinate, audio } = useSelector((state) => state.bubbles)
+  const { mouthAnimation, mouseCoordinate, audio } = useSelector((state) => state.bubbles)
   const dispatch = useDispatch()
   const ref1 = useRef(null)
   const ref2 = useRef(null)
@@ -23,7 +23,7 @@ const Icon = () => {
       repeat: 3,
       onComplete: () => {
         dispatch(stopMouthAnimation(0))
-        dispatch(startBubblesMoves(1))
+        dispatch(startBubblesAnimation(1))
       },
     })
     tl_Mouth.current.to('.mouth', {
@@ -46,12 +46,12 @@ const Icon = () => {
       morphSVG:
         'M34.8,37.6c0,0,5.2,1.7,10.1-0.1C43.3,41.9,37,42.1,34.8,37.6z',
     })
-    tl_Mouth.current.totalDuration(audioRef.current.duration)
-    if (startManAnimation) {
-      tl_Mouth.current.play()
+   // tl_Mouth.current.totalDuration(audioRef.current.duration)
+    if (mouthAnimation) {
+      tl_Mouth.current.restart()
       //audioRef.current.play()
     }
-  }, [startManAnimation, dispatch])
+  }, [mouthAnimation, dispatch])
 
   useEffect(() => {
     gsap.to(ref1.current, { x: mouseCoordinate.x, y: mouseCoordinate.y, duration: 1 })

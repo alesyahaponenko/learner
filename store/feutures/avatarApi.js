@@ -1,14 +1,24 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const avatarApi = createApi({
-    reducerPath: 'avatarApi',
-    baseQuery: fetchBaseQuery({ baseUrl: '/api/data' }),
-    endpoints: (builder) => ({
-        getAvatarInfo: builder.query({
-           // query: (name) => `pokemon/${name}`,
-           query: (data) =>  data,
-        }),
+  reducerPath: 'avatarApi',
+  baseQuery: fetchBaseQuery({ baseUrl: "/"}),
+  endpoints: (builder) => ({
+    getPredictions: builder.query({
+      query: (data) => ({
+        url: process.env.BASE_URL,
+        method: 'POST',
+        body: {
+          sender: "test_client",
+          query: data,
+        },
+      }),
+      //transformResponse: (response) => response.data
     }),
+    getAvatarInfo: builder.query({
+      query: () => '/api/data',
+    }),
+  }),
 })
 
-export const { useGetAvatarInfoQuery } = avatarApi
+export const { useGetPredictionsQuery, useGetAvatarInfoQuery } = avatarApi

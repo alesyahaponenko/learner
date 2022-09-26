@@ -1,18 +1,17 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styles from './Chat.module.scss'
 import gsap from 'gsap'
 import { useDispatch, useSelector } from 'react-redux'
-import { startMouthAnimation } from '../../store/feutures/bubblesSlicer'
+import {sendStop, setQuery, startMouthAnimation} from '../../store/feutures/bubblesSlicer'
 import Image from 'next/image'
 
 const Chat = () => {
-  const { startManAnimation } = useSelector((state) => state.bubbles)
+  const { startManAnimation, send } = useSelector((state) => state.bubbles)
   const [newMessage, setNewMessage] = useState('')
   const [chatMessage, setShatMessage] = useState([])
   const [id, setId] = useState(0)
 
   const textRef = useRef(null)
-
   const chatInner = useRef(null)
   const tl_Ball = useRef(null)
 
@@ -25,7 +24,8 @@ const Chat = () => {
     setId(id + 1)
     setNewMessage('')
     chatMessage.push({ id: id, text: newMessage, date: new Date().toLocaleString() })
-
+    dispatch(setQuery(chatMessage.at(-1).text))
+    dispatch(sendStop())
     tl_Ball.current.restart()
   }
 
@@ -38,16 +38,21 @@ const Chat = () => {
     })
 
     tl_Ball.current.fromTo('.tube', { opacity: '0' }, { opacity: '1', duration: 0.1 })
-    tl_Ball.current.fromTo('.tube', { y: '30vh' }, {
-      y: () =>
+    tl_Ball.current.fromTo(
+      '.tube',
+      { y: '30vh' },
+      {
+        y: () =>
           window.innerHeight > 1000
-              ? '12vh'
-              : (window.innerHeight < 1000 &&  window.innerHeight > 800)
-              ? '12vh'
-              : window.innerHeight < 800
-                  ? '10vh'
-                  : 0,
-      duration: 0.3 })
+            ? '12vh'
+            : window.innerHeight < 1000 && window.innerHeight > 800
+            ? '12vh'
+            : window.innerHeight < 800
+            ? '10vh'
+            : 0,
+        duration: 0.3,
+      }
+    )
     tl_Ball.current.to('.tube_ball', {
       opacity: 1,
     })
@@ -113,7 +118,7 @@ const Chat = () => {
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type your question here..."
             />
-            <button className={styles.btn} type="submit" disabled={!newMessage}>
+            <button className={styles.btn} type="submit" disabled={!newMessage || !send}>
               <span>Send</span>
             </button>
           </form>

@@ -1,13 +1,21 @@
 import styles from './Bubbles.module.scss'
 import gsap from 'gsap'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { stopMoveBubblesToStartPositions } from '../../store/feutures/bubblesSlicer'
+import {
+  allAnimationStart,
+  allAnimationStop, sendStart, sendStop,
+} from '../../store/feutures/bubblesSlicer'
+import { useGetPredictionsQuery } from '../../store/feutures/avatarApi'
 
 const Bubbles = () => {
-  const { predictions, loaded, startBubblesAnimation } = useSelector((state) => state.bubbles)
+  const { bubblesAnimation, query, allowAnimation } = useSelector((state) => state.bubbles)
+
+  const { data, error, isLoading } = useGetPredictionsQuery(query)
+
   const dispatch = useDispatch()
 
+  const [currentData, setCurrentData] = useState([])
   const [predictions_sorted, setPredictions_sorted] = useState(null)
 
   const el = useRef()
@@ -25,17 +33,25 @@ const Bubbles = () => {
     force3D: false,
     nullTargetWarn: false,
   })
+
   useEffect(() => {
-    const predictions_copy = [...predictions]
-    setPredictions_sorted(
-      predictions_copy.sort(function (a, b) {
-        return a.rank - b.rank
-      })
-    )
-  }, [predictions])
+    setCurrentData(data?.predictions ?? [])
+    // const predictions_copy = [...currentData]
+    // setPredictions_sorted(
+    //     predictions_copy.sort(function (a, b) {
+    //       return a.rank - b.rank
+    //     })
+    // )
+  }, [data])
+
   // intro
   useEffect(() => {
-    if (!loaded) return
+    if (isLoading) return
+    if (!data) {
+      dispatch(allAnimationStart())
+      dispatch(sendStart())
+      return
+    }
     const vh = (coef) => window.innerHeight * (coef / 100)
     const vw = (coef) => window.innerWidth * (coef / 100)
 
@@ -49,7 +65,8 @@ const Bubbles = () => {
 
     tl_intro.current = gsap.timeline({
       paused: true,
-      onComplete: () => dispatch(stopMoveBubblesToStartPositions()),
+      onStart: () => dispatch(allAnimationStop()),
+      onComplete: () => dispatch(allAnimationStart()),
     })
 
     tl_intro.current.fromTo(
@@ -98,15 +115,16 @@ const Bubbles = () => {
         i / 6
       )
       startAngle += angle
-      console.log('i', i, 'startAngle', startAngle)
     }
 
-    if (startBubblesAnimation) {
-      tl_intro.current.play()
+    if (bubblesAnimation) {
+      tl_intro.current.restart()
     }
-  }, [startBubblesAnimation, loaded])
+  }, [bubblesAnimation])
 
   useEffect(() => {
+    const vh = (coef) => window.innerHeight * (coef / 100)
+
     gsap.to(big, {
       x: 0,
       y: 0,
@@ -114,60 +132,49 @@ const Bubbles = () => {
       height: '30vh',
       duration: 1,
     })
-
-    // tl_moveDown.current = gsap.timeline({paused: true})
-    // const vh = (coef) => window.innerHeight * (coef / 100)
-
-    // for (let i = 0; i < q('li').length; i++) {
-    //   if (!q('li')[i].classList.contains('active')) {
-    //     tl_moveDown.current.to(
-    //         q('li')[i],
-    //       {
-    //         y: vh(0),
-    //         top: '50vh',
-    //         left: '50vw',
-    //         scale: 1,
-    //         duration: 1,
-    //       },
-    //       i / 6
-    //     )
-    //   }
-    // }
-    // if (big) {
-    //   tl_moveDown.current.play()
-    // }
+    console.log(bubbles)
+     tl_moveDown.current = gsap.timeline({paused: true})
+    if (bubbles) {
+      for (let i = 0; i < bubbles.length; i++) {
+        tl_moveDown.current.to(
+            bubbles,
+            {
+              y: vh(0),
+              top: '200vh',
+              left: '50vw',
+              scale: 1,
+              duration: 2,
+            },
+            i / 6
+        )
+      }
+    }
+    if (big) {
+      tl_moveDown.current.play()
+    }
   }, [big])
 
   const clickBubble = (e) => {
     if (e.target.classList.contains('active') || !e.target.classList.contains('liAnim')) return
+    if (!allowAnimation) return
+
+    dispatch(allAnimationStop())
+
     let all = q('li')
     all.forEach((el) => {
-      el.classList.remove('active')
+        el.classList.remove('active')
+        e.target.classList.add('active')
     })
-    e.target.classList.add('active')
-    const vh = (coef) => window.innerHeight * (coef / 100)
 
-    //setElSmall(e.target)
-    setBig(e.target)
-
-    // will be used in future
-
-    let startAngle = -90
-    const length = q('li').length
-    const angle = 360 / (length - 1)
-    const rad = Math.PI / 180
-
-    for (let i = 1; i < bubbles; i++) {
-      if (e.target.querySelector('.block_name').innerHTML) {
-        gsap.timeline().to(q('li'), {
-          x: vh(30) * Math.cos(startAngle * rad),
-          y: vh(30) * Math.sin(startAngle * rad),
-          duration: 1,
-          stagger: 0.1,
-        })
+    let arr = []
+    let all_new = q('li')
+    all_new.forEach((el) => {
+      if(!el.classList.contains('active')) {
+        arr.push(el)
       }
-      startAngle += angle
-    }
+    })
+    setBubbles(arr)
+    setBig(e.target)
   }
 
   const hoverBubble = (e) => {
@@ -208,12 +215,16 @@ const Bubbles = () => {
     tl_more.current.reverse()
   }
 
+  if (isLoading) {
+    return <div></div>
+  }
+
   return (
     <>
       <div className={styles.bubbles}>
         <ul ref={el}>
-          {predictions_sorted &&
-            predictions_sorted.map((el, index) => (
+          {currentData &&
+            currentData.map((el, index) => (
               <li
                 key={index}
                 onClick={clickBubble}
