@@ -45,6 +45,11 @@
   font-size: 1vw;
 }
 
+.inputField:disabled {
+  background: #ccc;
+  border: 1px solid #ccc;
+}
+
 .inputField:focus,
 .inputField:active,
 .inputField:hover {
@@ -63,9 +68,11 @@
   font-size: 1.5vw;
   width: 100%;
 }
-.btn:disabled{
+
+.btn:disabled {
   background: #CCCCCC;
 }
+
 .chatWindow {
   width: 100%;
   height: auto;
@@ -105,6 +112,7 @@
   align-items: center;
   flex-direction: column;
   width: 100%;
+  opacity: 0;
 
 
   @media screen and (max-height: 950px) {

@@ -47,11 +47,20 @@ li {
   list-style: none;
 }
 
-
+.liAnim {
+  top: 15vh;
+  left: 10vw;
+  width: 17vh;
+  height: 17vh;
+}
 .liAnim.active {
   font-size: 1vw;
   cursor: auto;
   z-index: 99;
+  top: 10vh;
+  left: 4vw;
+  width: 17vh;
+  height: 17vh;
 
   .block_name {
     font-size: 1.5vw;

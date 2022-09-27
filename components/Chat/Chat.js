@@ -2,14 +2,24 @@ import { useEffect, useRef, useState } from 'react'
 import styles from './Chat.module.scss'
 import gsap from 'gsap'
 import { useDispatch, useSelector } from 'react-redux'
-import {sendStop, setQuery, startMouthAnimation} from '../../store/feutures/bubblesSlicer'
+import {
+  sendBtnStop,
+  sendLoading,
+  sendPredictions,
+  startMouthAnimation,
+} from '../../store/feutures/bubblesSlicer'
 import Image from 'next/image'
+import { useGetPredictionsQuery } from '../../store/feutures/avatarApi'
 
 const Chat = () => {
-  const { startManAnimation, send } = useSelector((state) => state.bubbles)
+  const { send, chatQuery } = useSelector((state) => state.bubbles)
+
   const [newMessage, setNewMessage] = useState('')
-  const [chatMessage, setShatMessage] = useState([])
+  const [chatMessage, setChatMessage] = useState([])
+  const [query, setQuery] = useState()
   const [id, setId] = useState(0)
+
+  const { data, error, isLoading } = useGetPredictionsQuery(query)
 
   const textRef = useRef(null)
   const chatInner = useRef(null)
@@ -20,15 +30,13 @@ const Chat = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!newMessage.trim().length) return
-    if (startManAnimation) return
+    dispatch(sendBtnStop())
     setId(id + 1)
     setNewMessage('')
     chatMessage.push({ id: id, text: newMessage, date: new Date().toLocaleString() })
-    dispatch(setQuery(chatMessage.at(-1).text))
-    dispatch(sendStop())
+    setQuery(chatMessage.at(-1).text)
     tl_Ball.current.restart()
   }
-
   useEffect(() => {
     tl_Ball.current = gsap.timeline({
       paused: true,
@@ -37,7 +45,7 @@ const Chat = () => {
       },
     })
 
-    tl_Ball.current.fromTo('.tube', { opacity: '0' }, { opacity: '1', duration: 0.1 })
+    tl_Ball.current.fromTo('.tube', { opacity: '0' }, { opacity: '0', duration: 0.1 })
     tl_Ball.current.fromTo(
       '.tube',
       { y: '30vh' },
@@ -82,7 +90,21 @@ const Chat = () => {
     )
     tl_Ball.current.to('.tube', { y: '30vh', duration: 0.3 })
     tl_Ball.current.to('.tube', { opacity: '0', duration: 0.1 })
+    tl_Ball.current.timeScale(10)
   }, [])
+
+  useEffect(() => {
+    if (!data) return
+    dispatch(sendLoading(true))
+    dispatch(sendPredictions(data?.predictions))
+  }, [data])
+
+  useEffect(() => {
+    if (!chatQuery) return
+    setId(id + 1)
+    chatMessage.push({ id: id, text: chatQuery, date: new Date().toLocaleString() })
+    setQuery(chatQuery)
+  }, [chatQuery])
 
   return (
     <>
@@ -116,7 +138,8 @@ const Chat = () => {
               type="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Type your question here..."
+              placeholder={send ? 'Type your question here...' : null}
+              disabled={!send}
             />
             <button className={styles.btn} type="submit" disabled={!newMessage || !send}>
               <span>Send</span>

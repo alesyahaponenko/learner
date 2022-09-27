@@ -4,18 +4,19 @@ import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   allAnimationStart,
-  allAnimationStop, sendStart, sendStop,
+  allAnimationStop,
+  setChatQuery,
+  setIsBubbleClick,
 } from '../../store/feutures/bubblesSlicer'
-import { useGetPredictionsQuery } from '../../store/feutures/avatarApi'
 
 const Bubbles = () => {
-  const { bubblesAnimation, query, allowAnimation } = useSelector((state) => state.bubbles)
-
-  const { data, error, isLoading } = useGetPredictionsQuery(query)
-
+  const { isBubbleClick, bubblesAnimation, predictions, allowAnimation, isReady, chatQuery } =
+    useSelector((state) => state.bubbles)
+  const all = useSelector((state) => state.bubbles)
   const dispatch = useDispatch()
 
   const [currentData, setCurrentData] = useState([])
+  const [bubblePosition, setBubblePosition] = useState(0)
   const [predictions_sorted, setPredictions_sorted] = useState(null)
 
   const el = useRef()
@@ -35,28 +36,50 @@ const Bubbles = () => {
   })
 
   useEffect(() => {
-    setCurrentData(data?.predictions ?? [])
+    if (predictions && isBubbleClick) {
+      let arr = [...predictions]
+      let p = arr.shift()
+      arr.splice(bubblePosition, 0, p)
+      console.log('predictions', predictions)
+      console.log('arr', arr)
+      console.log('currentDataA', currentData)
+      setCurrentData(arr)
+
+      // console.log("currentData",currentData)
+      // console.log("bubblePosition",bubblePosition)
+    } else {
+      // console.log("currentDataE",currentData)
+      let arr = [...predictions]
+      // let p = arr.shift()
+      // arr.splice(1, 0, p);
+      setCurrentData(arr)
+    }
+    //     if (big) {
+    // console.log(
+    //       'big', big.querySelector(".block_name").innerHTML
+    //     )
+    //     }
+
     // const predictions_copy = [...currentData]
     // setPredictions_sorted(
     //     predictions_copy.sort(function (a, b) {
     //       return a.rank - b.rank
     //     })
     // )
-  }, [data])
+  }, [predictions, isBubbleClick])
 
-  // intro
   useEffect(() => {
-    if (isLoading) return
-    if (!data) {
+    if (!isReady || isBubbleClick) return
+    if (!currentData) {
       dispatch(allAnimationStart())
-      dispatch(sendStart())
+      // dispatch(sendBtnStart())
       return
     }
+
     const vh = (coef) => window.innerHeight * (coef / 100)
     const vw = (coef) => window.innerWidth * (coef / 100)
 
     setBig(q('li')[0])
-    setBubbles(q('li').length)
 
     let startAngle = -90
     const length = q('li').length
@@ -69,40 +92,24 @@ const Bubbles = () => {
       onComplete: () => dispatch(allAnimationStart()),
     })
 
-    tl_intro.current.fromTo(
-      q('li')[0],
-      {
-        top: '10vh',
-        left: '4vw',
-        width: '17vh',
-        height: '17vh',
+    tl_intro.current.to(big, {
+      top: '50%',
+      left: '50%',
+      width: '30vh',
+      height: '30vh',
+      duration: 1,
+      scale: 1,
+      ease: 'back',
+      onStart: () => {
+        big.style.zIndex = 'auto'
+        big.classList.add(`active`)
       },
-      {
-        top: '50%',
-        left: '50%',
-        width: '30vh',
-        height: '30vh',
-        duration: 1,
-        scale: 1,
-        ease: 'back',
-        onStart: () => {
-          q('li')[0].style.zIndex = 'auto'
-          q('li')[0].classList.add(`active`)
-        },
-      }
-    )
+    })
 
     for (let i = 1; i < length; i++) {
       q('li')[i].classList.add(`li${i}`)
-
-      tl_intro.current.fromTo(
+      tl_intro.current.to(
         q('li')[i],
-        {
-          top: '15vh',
-          left: '10vw',
-          width: '17vh',
-          height: '17vh',
-        },
         {
           x: vh(28) * Math.cos(startAngle * rad),
           y: vh(28) * Math.sin(startAngle * rad),
@@ -120,56 +127,101 @@ const Bubbles = () => {
     if (bubblesAnimation) {
       tl_intro.current.restart()
     }
-  }, [bubblesAnimation])
+  }, [bubblesAnimation, currentData, isReady, isBubbleClick])
 
   useEffect(() => {
-    const vh = (coef) => window.innerHeight * (coef / 100)
-
     gsap.to(big, {
       x: 0,
       y: 0,
+      xPercent: -50,
+      yPercent: -50,
       width: '30vh',
       height: '30vh',
       duration: 1,
     })
-    console.log(bubbles)
-     tl_moveDown.current = gsap.timeline({paused: true})
+  }, [big])
+
+  useEffect(() => {
+    const vh = (coef) => window.innerHeight * (coef / 100)
+
+    tl_moveDown.current = gsap.timeline({
+      paused: true,
+      onComplete: () => dispatch(allAnimationStart()),
+    })
     if (bubbles) {
+      let startAngle = -90
+      const angle = 360 / bubbles.length
+      const rad = Math.PI / 180
+
+      tl_moveDown.current.to(bubbles, {
+        y: vh(0),
+        top: '200vh',
+        left: '50vw',
+        scale: 1,
+        stagger: 0.1,
+        duration: 2,
+      })
+      tl_moveDown.current.to(bubbles, {
+        top: '15vh',
+        left: '10vw',
+        width: '17vh',
+        height: '17vh',
+        xPercent: -50,
+        yPercent: -50,
+        x: 0,
+        y: 0,
+        scale: 0,
+        opacity: 0,
+        duration: 0.1,
+      })
       for (let i = 0; i < bubbles.length; i++) {
         tl_moveDown.current.to(
-            bubbles,
-            {
-              y: vh(0),
-              top: '200vh',
-              left: '50vw',
-              scale: 1,
-              duration: 2,
-            },
-            i / 6
+          bubbles[i],
+          {
+            top: '50vh',
+            left: '50vw',
+            width: '17vh',
+            height: '17vh',
+            xPercent: -50,
+            yPercent: -50,
+            x: vh(28) * Math.cos(startAngle * rad),
+            y: vh(28) * Math.sin(startAngle * rad),
+            scale: 1,
+            opacity: 1,
+            duration: 1,
+            ease: 'back',
+          },
+          3.05 + i / 6
         )
+        startAngle += angle
       }
     }
-    if (big) {
+    if (bubbles) {
       tl_moveDown.current.play()
+      console.log(all)
     }
-  }, [big])
+  }, [bubbles])
 
   const clickBubble = (e) => {
     if (e.target.classList.contains('active') || !e.target.classList.contains('liAnim')) return
     if (!allowAnimation) return
-
     dispatch(allAnimationStop())
+    dispatch(setIsBubbleClick(true))
+    dispatch(setChatQuery(e.target.querySelector('.block_name').innerText))
 
     let all = q('li')
-    all.forEach((el) => {
-        el.classList.remove('active')
-        e.target.classList.add('active')
+    all.forEach((el, index) => {
+      if (el.classList.contains('active')) {
+        setBubblePosition(index)
+      }
+      el.classList.remove('active')
+      e.target.classList.add('active')
     })
 
     let arr = []
     let all_new = q('li')
     all_new.forEach((el) => {
-      if(!el.classList.contains('active')) {
+      if (!el.classList.contains('active')) {
         arr.push(el)
       }
     })
@@ -213,10 +265,6 @@ const Bubbles = () => {
 
   const clickLess = () => {
     tl_more.current.reverse()
-  }
-
-  if (isLoading) {
-    return <div></div>
   }
 
   return (

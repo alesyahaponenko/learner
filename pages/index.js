@@ -1,7 +1,7 @@
 import Home from '../components/Home/Home'
 import { useState } from 'react'
-import {useDispatch} from 'react-redux';
-import {setMouseCoordinate} from '../store/feutures/bubblesSlicer';
+import { useDispatch } from 'react-redux'
+import { setMouseCoordinate } from '../store/feutures/bubblesSlicer'
 
 function App() {
   const dispatch = useDispatch()
@@ -12,15 +12,15 @@ function App() {
 
   function handleMouseMove(ev) {
     setMousePosition({
-      x:  ev.pageX / 1000,
+      x: ev.pageX / 1000,
       y: -(window.innerHeight / 2 - ev.pageY) / 800,
     })
-    dispatch(setMouseCoordinate({ x:mousePosition.x, y:mousePosition.y }))
+    dispatch(setMouseCoordinate({ x: mousePosition.x, y: mousePosition.y }))
   }
 
   return (
-    <div className='container' onMouseMove={handleMouseMove}>
-      <div className='page'>
+    <div className="container" onMouseMove={handleMouseMove}>
+      <div className="page">
         <Home />
       </div>
     </div>

@@ -6,7 +6,7 @@ export const avatarApi = createApi({
   endpoints: (builder) => ({
     getPredictions: builder.query({
       query: (data) => ({
-        url: process.env.BASE_URL,
+        url: process.env.BASE_URL_DEV,
         method: 'POST',
         body: {
           sender: "test_client",
