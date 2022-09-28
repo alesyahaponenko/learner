@@ -10,15 +10,23 @@ import {
 } from '../../store/feutures/bubblesSlicer'
 
 const Bubbles = () => {
-  const { isBubbleClick, bubblesAnimation, predictions, allowAnimation, isReady, chatQuery } =
-    useSelector((state) => state.bubbles)
+  const {
+    isBubbleClick,
+    bubblesAnimation,
+    predictions,
+    allowAnimation,
+    isReady,
+    chatQuery,
+    messageColorId,
+  } = useSelector((state) => state.bubbles)
   const all = useSelector((state) => state.bubbles)
   const dispatch = useDispatch()
 
-  const [currentData, setCurrentData] = useState([])
+  const [currentData, setCurrentData] = useState(null)
   const [bubblePosition, setBubblePosition] = useState(0)
+  const [text, setText] = useState('')
+  const [changeBubble, setChangeBubble] = useState(false)
   const [predictions_sorted, setPredictions_sorted] = useState(null)
-
   const el = useRef()
   const q = gsap.utils.selector(el)
   const tl_intro = useRef(null)
@@ -28,7 +36,6 @@ const Bubbles = () => {
 
   const [bubbles, setBubbles] = useState(null)
   const [big, setBig] = useState(null)
-  const [elSmall, setElSmall] = useState(null)
 
   gsap.config({
     force3D: false,
@@ -38,27 +45,13 @@ const Bubbles = () => {
   useEffect(() => {
     if (predictions && isBubbleClick) {
       let arr = [...predictions]
-      let p = arr.shift()
-      arr.splice(bubblePosition, 0, p)
-      console.log('predictions', predictions)
-      console.log('arr', arr)
-      console.log('currentDataA', currentData)
+      arr.splice(bubblePosition, 0, arr.shift())
       setCurrentData(arr)
-
-      // console.log("currentData",currentData)
-      // console.log("bubblePosition",bubblePosition)
+      // console.log('currentDataA', currentData)
     } else {
-      // console.log("currentDataE",currentData)
       let arr = [...predictions]
-      // let p = arr.shift()
-      // arr.splice(1, 0, p);
       setCurrentData(arr)
     }
-    //     if (big) {
-    // console.log(
-    //       'big', big.querySelector(".block_name").innerHTML
-    //     )
-    //     }
 
     // const predictions_copy = [...currentData]
     // setPredictions_sorted(
@@ -72,62 +65,61 @@ const Bubbles = () => {
     if (!isReady || isBubbleClick) return
     if (!currentData) {
       dispatch(allAnimationStart())
+      console.log('!currentData')
       // dispatch(sendBtnStart())
       return
     }
-
-    const vh = (coef) => window.innerHeight * (coef / 100)
-    const vw = (coef) => window.innerWidth * (coef / 100)
-
+    console.log(all)
     setBig(q('li')[0])
-
-    let startAngle = -90
-    const length = q('li').length
-    const angle = 360 / (length - 1)
-    const rad = Math.PI / 180
-
+    console.log(big)
+    const vh = (coef) => window.innerHeight * (coef / 100)
     tl_intro.current = gsap.timeline({
       paused: true,
       onStart: () => dispatch(allAnimationStop()),
-      onComplete: () => dispatch(allAnimationStart()),
-    })
-
-    tl_intro.current.to(big, {
-      top: '50%',
-      left: '50%',
-      width: '30vh',
-      height: '30vh',
-      duration: 1,
-      scale: 1,
-      ease: 'back',
-      onStart: () => {
-        big.style.zIndex = 'auto'
-        big.classList.add(`active`)
+      onComplete: () => {
+        dispatch(allAnimationStart())
       },
     })
+    if (big) {
+      big.classList.add('active')
+      big.style.zIndex = '0'
 
-    for (let i = 1; i < length; i++) {
-      q('li')[i].classList.add(`li${i}`)
-      tl_intro.current.to(
-        q('li')[i],
-        {
-          x: vh(28) * Math.cos(startAngle * rad),
-          y: vh(28) * Math.sin(startAngle * rad),
-          top: '50vh',
-          left: '50vw',
-          scale: 1,
-          duration: 1,
-          ease: 'back',
-        },
-        i / 6
-      )
-      startAngle += angle
+      let all = q('li').length
+      let startAngle = -90
+      const angle = 360 / (all - 1)
+      const rad = Math.PI / 180
+
+      tl_intro.current.to(big, {
+        top: '50%',
+        left: '50%',
+        width: '30vh',
+        height: '30vh',
+        duration: 1,
+        scale: 1,
+        ease: 'back',
+      })
+
+      for (let i = 1; i < all; i++) {
+        tl_intro.current.to(
+          q('li')[i],
+          {
+            x: vh(28) * Math.cos(startAngle * rad),
+            y: vh(28) * Math.sin(startAngle * rad),
+            top: '50vh',
+            left: '50vw',
+            scale: 1,
+            duration: 1,
+            ease: 'back',
+          },
+          i / 6
+        )
+        startAngle += angle
+      }
     }
-
     if (bubblesAnimation) {
       tl_intro.current.restart()
     }
-  }, [bubblesAnimation, currentData, isReady, isBubbleClick])
+  }, [big, bubblesAnimation, currentData, isReady, isBubbleClick])
 
   useEffect(() => {
     gsap.to(big, {
@@ -141,13 +133,18 @@ const Bubbles = () => {
     })
   }, [big])
 
+  // if bubble click
   useEffect(() => {
     const vh = (coef) => window.innerHeight * (coef / 100)
 
     tl_moveDown.current = gsap.timeline({
       paused: true,
-      onComplete: () => dispatch(allAnimationStart()),
+      onComplete: () => {
+        dispatch(allAnimationStart())
+        setChangeBubble(false)
+      },
     })
+
     if (bubbles) {
       let startAngle = -90
       const angle = 360 / bubbles.length
@@ -198,33 +195,62 @@ const Bubbles = () => {
     }
     if (bubbles) {
       tl_moveDown.current.play()
-      console.log(all)
     }
   }, [bubbles])
+
+  useEffect(() => {
+    if (bubbles && !changeBubble) {
+      bubbles.forEach((el) => {
+        el.classList.remove('bubble_color')
+      })
+      if (messageColorId && messageColorId != chatQuery.length - 1) {
+        let num = parseInt(messageColorId) + 1
+        if (num >= 0) {
+          let numBubble = parseInt(chatQuery[num].numBubble)
+          bubbles[numBubble - 1].classList.add('bubble_color')
+        }
+      }
+    }
+  }, [messageColorId])
+
+  useEffect(() => {
+    if (bubblePosition) {
+      dispatch(
+        setChatQuery({
+          id: chatQuery.length ? chatQuery.at(-1).id + 1 : 0,
+          text: text,
+          numBubble: bubblePosition,
+          date: new Date().toLocaleString(),
+        })
+      )
+    }
+  }, [bubblePosition])
 
   const clickBubble = (e) => {
     if (e.target.classList.contains('active') || !e.target.classList.contains('liAnim')) return
     if (!allowAnimation) return
     dispatch(allAnimationStop())
     dispatch(setIsBubbleClick(true))
-    dispatch(setChatQuery(e.target.querySelector('.block_name').innerText))
+    setChangeBubble(true)
 
     let all = q('li')
-    all.forEach((el, index) => {
-      if (el.classList.contains('active')) {
-        setBubblePosition(index)
-      }
+    all.forEach((el) => {
       el.classList.remove('active')
-      e.target.classList.add('active')
     })
+    e.target.classList.add('active')
 
     let arr = []
     let all_new = q('li')
-    all_new.forEach((el) => {
+    all_new.forEach((el, index) => {
+      el.classList.remove('bubble_color')
       if (!el.classList.contains('active')) {
         arr.push(el)
+      } else {
+        setBubblePosition(index)
       }
     })
+
+    setText(e.target.querySelector('.block_name').innerText)
     setBubbles(arr)
     setBig(e.target)
   }
@@ -304,5 +330,3 @@ const Bubbles = () => {
 }
 
 export default Bubbles
-
-

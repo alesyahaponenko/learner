@@ -3,17 +3,18 @@ import { createSlice } from '@reduxjs/toolkit'
 export const bubblesSlice = createSlice({
   name: 'bubbles',
   initialState: {
-    chatQuery: '',
+    chatQuery: [],
     isReady: false,
     allowAnimation: true,
     audio: undefined,
     mouthAnimation: 0,
-    bubblesAnimation: 0,
+    bubblesAnimation: false,
     send: true,
     predictions: [],
     mouseCoordinate: { x: 0, y: 0 },
     message: '',
-    isBubbleClick: 0,
+    isBubbleClick: false,
+    messageColorId: undefined,
   },
 
   reducers: {
@@ -24,7 +25,8 @@ export const bubblesSlice = createSlice({
       return { ...state, predictions: payload }
     },
     setChatQuery: (state, { payload }) => {
-      return { ...state, chatQuery: payload }
+      //console.log('payload',payload)
+      state.chatQuery.push(payload)
     },
     allAnimationStop: (state) => {
       return { ...state, allowAnimation: false }
@@ -44,14 +46,17 @@ export const bubblesSlice = createSlice({
     stopMouthAnimation: (state) => {
       return { ...state, mouthAnimation: 0 }
     },
-    startBubblesAnimation: (state) => {
-      return { ...state, bubblesAnimation: 1 }
+    startBubblesAnimation: (state, payload) => {
+      return { ...state, bubblesAnimation: payload }
     },
     setMouseCoordinate: (state, { payload }) => {
       return { ...state, mouseCoordinate: { x: payload.x, y: payload.y } }
     },
     setIsBubbleClick: (state, { payload }) => {
       return { ...state, isBubbleClick: payload }
+    },
+    setMessageId: (state, { payload }) => {
+      return { ...state, messageColorId: payload }
     },
   },
 })
@@ -69,6 +74,7 @@ export const {
   setMouseCoordinate,
   startBubblesAnimation,
   setIsBubbleClick,
+  setMessageId,
 } = bubblesSlice.actions
 
 export default bubblesSlice.reducer

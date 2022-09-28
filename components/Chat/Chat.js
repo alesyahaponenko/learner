@@ -6,18 +6,18 @@ import {
   sendBtnStop,
   sendLoading,
   sendPredictions,
+  setChatQuery,
+  setMessageId,
   startMouthAnimation,
 } from '../../store/feutures/bubblesSlicer'
 import Image from 'next/image'
 import { useGetPredictionsQuery } from '../../store/feutures/avatarApi'
 
 const Chat = () => {
-  const { send, chatQuery } = useSelector((state) => state.bubbles)
+  const { send, chatQuery, isBubbleClick } = useSelector((state) => state.bubbles)
 
   const [newMessage, setNewMessage] = useState('')
-  const [chatMessage, setChatMessage] = useState([])
   const [query, setQuery] = useState()
-  const [id, setId] = useState(0)
 
   const { data, error, isLoading } = useGetPredictionsQuery(query)
 
@@ -31,10 +31,11 @@ const Chat = () => {
     e.preventDefault()
     if (!newMessage.trim().length) return
     dispatch(sendBtnStop())
-    setId(id + 1)
+    setQuery(newMessage)
+    dispatch(
+      setChatQuery({ id: 0, text: newMessage, numBubble: 0, date: new Date().toLocaleString() })
+    )
     setNewMessage('')
-    chatMessage.push({ id: id, text: newMessage, date: new Date().toLocaleString() })
-    setQuery(chatMessage.at(-1).text)
     tl_Ball.current.restart()
   }
   useEffect(() => {
@@ -96,15 +97,21 @@ const Chat = () => {
   useEffect(() => {
     if (!data) return
     dispatch(sendLoading(true))
-    dispatch(sendPredictions(data?.predictions))
+    let arr = [...data.predictions]
+    // console.log('data.predictions', data.predictions)
+    // isBubbleClick ? arr : arr.push(arr.shift())
+    dispatch(sendPredictions(arr))
   }, [data])
 
   useEffect(() => {
-    if (!chatQuery) return
-    setId(id + 1)
-    chatMessage.push({ id: id, text: chatQuery, date: new Date().toLocaleString() })
-    setQuery(chatQuery)
-  }, [chatQuery])
+    setQuery(chatQuery?.at(-1)?.text)
+  }, [chatQuery?.at(-1)?.id])
+
+  const clickChatMessage = (e) => {
+    setQuery(e.target.querySelector('.message').innerText)
+    dispatch(setMessageId(e.target.dataset.id))
+    console.log('e.target.dataset.id', e.target.dataset.id)
+  }
 
   return (
     <>
@@ -123,10 +130,11 @@ const Chat = () => {
         <div className={styles.chatInner} ref={chatInner}>
           <div className={styles.chatWindow} ref={textRef}>
             <ul>
-              {chatMessage.map((el) => (
-                <li key={el.id}>
-                  <div className={styles.textMessage}>
-                    {el.text} <span>{el.date}</span>
+              {chatQuery.map((el) => (
+                <li key={el.id} onClick={clickChatMessage}>
+                  <div className={styles.textMessage} data-id={el.id}>
+                    <div className={styles.message + ' message'}>{el.text}</div>
+                    <span>{el.date}</span>
                   </div>
                 </li>
               ))}

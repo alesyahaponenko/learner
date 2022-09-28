@@ -91,6 +91,7 @@
   position: relative;
   color: #333;
   text-align: left;
+  cursor: pointer;
 
   span {
     position: absolute;
@@ -99,6 +100,11 @@
     white-space: nowrap;
     right: 5px;
     top: 5px;
+    pointer-events: none;
+  }
+
+  .message {
+    pointer-events: none;
   }
 }
 
