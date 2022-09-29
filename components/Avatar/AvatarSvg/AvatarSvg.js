@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import styles from './ManSvg.module.scss'
+import styles from './AvatarSvg.module.scss'
 import gsap from 'gsap'
 import { MorphSVGPlugin } from 'gsap/dist/MorphSVGPlugin'
 import { useDispatch, useSelector } from 'react-redux'
@@ -16,6 +16,7 @@ const Icon = () => {
   const audioRef = useRef(null)
 
   useEffect(() => {
+    console.log(audio)
     tl_Mouth.current = gsap.timeline({
       paused: true,
       yoyo: true,
@@ -44,12 +45,16 @@ const Icon = () => {
       duration: 0.3,
       morphSVG: 'M34.8,37.6c0,0,5.2,1.7,10.1-0.1C43.3,41.9,37,42.1,34.8,37.6z',
     })
-    // tl_Mouth.current.totalDuration(audioRef.current.duration)
+    if (audio) {
+      tl_Mouth.current.totalDuration(audioRef.current.duration)
+    }
     if (mouthAnimation) {
       tl_Mouth.current.restart()
-      //audioRef.current.play()
+      if (audio) {
+        audioRef.current.play()
+      }
     }
-  }, [mouthAnimation, dispatch])
+  }, [mouthAnimation, dispatch, audio])
 
   useEffect(() => {
     gsap.to(ref1.current, { x: mouseCoordinate.x, y: mouseCoordinate.y, duration: 1 })
@@ -58,7 +63,9 @@ const Icon = () => {
 
   return (
     <>
-      <audio src={`https://storage.cloud.google.com/knowzee/${audio}`} ref={audioRef}></audio>
+      {audio && (
+        <audio src={`https://storage.cloud.google.com/knowzee/${audio}`} ref={audioRef}></audio>
+      )}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"

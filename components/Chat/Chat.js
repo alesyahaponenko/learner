@@ -4,8 +4,10 @@ import gsap from 'gsap'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   sendBtnStop,
+  sendIsPredictionsLoading,
   sendLoading,
   sendPredictions,
+  setAudio,
   setChatQuery,
   setMessageId,
   startMouthAnimation,
@@ -18,8 +20,9 @@ const Chat = () => {
 
   const [newMessage, setNewMessage] = useState('')
   const [query, setQuery] = useState()
+  const [skip, setSkip] = useState(true)
 
-  const { data, error, isLoading } = useGetPredictionsQuery(query)
+  const { data, error, isLoading, isFetching } = useGetPredictionsQuery(query, { skip })
 
   const textRef = useRef(null)
   const chatInner = useRef(null)
@@ -30,6 +33,7 @@ const Chat = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!newMessage.trim().length) return
+    setSkip(false)
     dispatch(sendBtnStop())
     setQuery(newMessage)
     dispatch(
@@ -97,11 +101,13 @@ const Chat = () => {
   useEffect(() => {
     if (!data) return
     dispatch(sendLoading(true))
-    let arr = [...data.predictions]
-    // console.log('data.predictions', data.predictions)
-    // isBubbleClick ? arr : arr.push(arr.shift())
-    dispatch(sendPredictions(arr))
+    dispatch(sendPredictions(data.predictions))
+    setAudio(data.predictions[0].audio.audio_file_path)
   }, [data])
+
+  useEffect(() => {
+    dispatch(sendIsPredictionsLoading(isFetching))
+  }, [isFetching])
 
   useEffect(() => {
     setQuery(chatQuery?.at(-1)?.text)
@@ -110,7 +116,7 @@ const Chat = () => {
   const clickChatMessage = (e) => {
     setQuery(e.target.querySelector('.message').innerText)
     dispatch(setMessageId(e.target.dataset.id))
-    console.log('e.target.dataset.id', e.target.dataset.id)
+    // console.log('e.target.dataset.id', e.target.dataset.id)
   }
 
   return (

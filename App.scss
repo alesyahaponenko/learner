@@ -47,11 +47,16 @@ li {
   list-style: none;
 }
 
+.liAnim:hover {
+  z-index: 99 !important;
+}
+
 .liAnim {
   top: 15vh;
   left: 10vw;
   width: 17vh;
   height: 17vh;
+  z-index: 9 !important;
 }
 
 .liAnim.active {
@@ -107,27 +112,24 @@ li {
   }
 }
 
-.liAnim:nth-child(6) {
-  z-index: 4;
-}
-
-.liAnim:nth-child(7) {
-  z-index: 3;
-}
-
-.liAnim:nth-child(8) {
-  z-index: 2;
-}
-
-.liAnim:nth-child(5) {
-  z-index: 3;
-}
-
-.liAnim:nth-child(4) {
-  z-index: 3;
+.short_description.true {
+  display: none !important;
 }
 
 .bubble_color {
   background: radial-gradient(circle, #002451 0%, #01040c 100%) !important;
   color: white !important;
+}
+
+.load {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.avatarInfoBtn .modal {
+  left: 8vw !important;
 }

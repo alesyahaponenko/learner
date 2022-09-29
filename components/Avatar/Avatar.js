@@ -1,10 +1,10 @@
-import styles from './Man.module.scss'
-import ManSvg from './ManSvg/ManSvg'
+import styles from './Avatar.module.scss'
+import ManSvg from './AvatarSvg/AvatarSvg'
 import InfoButton from '../Buttons/InfoButton/InfoButton'
 import { useGetAvatarInfoQuery } from '../../store/feutures/avatarApi'
 
-const Man = () => {
-  const { data = {}, error, isLoading } = useGetAvatarInfoQuery('')
+const Avatar = () => {
+  const { data, error, isLoading } = useGetAvatarInfoQuery('')
 
   return (
     <>
@@ -13,8 +13,8 @@ const Man = () => {
           <ManSvg />
         </div>
         <div className={styles.nameWrap}>
-          <div className={styles.name}>Russell Lakey</div>
-          <div className={styles.infoButton}>
+          <div className={styles.name}>{isLoading ? <div>...</div> : data.name}</div>
+          <div className={styles.infoButton + ' avatarInfoBtn'}>
             <InfoButton data={data} isLoading={isLoading} error={error} />
           </div>
         </div>
@@ -23,4 +23,4 @@ const Man = () => {
   )
 }
 
-export default Man
+export default Avatar

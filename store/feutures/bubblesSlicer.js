@@ -15,6 +15,7 @@ export const bubblesSlice = createSlice({
     message: '',
     isBubbleClick: false,
     messageColorId: undefined,
+    isPredictionsLoading: false,
   },
 
   reducers: {
@@ -27,6 +28,9 @@ export const bubblesSlice = createSlice({
     setChatQuery: (state, { payload }) => {
       //console.log('payload',payload)
       state.chatQuery.push(payload)
+    },
+    setAudio: (state, { payload }) => {
+      return { ...state, audio: payload }
     },
     allAnimationStop: (state) => {
       return { ...state, allowAnimation: false }
@@ -58,6 +62,9 @@ export const bubblesSlice = createSlice({
     setMessageId: (state, { payload }) => {
       return { ...state, messageColorId: payload }
     },
+    sendIsPredictionsLoading: (state, { payload }) => {
+      return { ...state, isPredictionsLoading: payload }
+    },
   },
 })
 
@@ -65,6 +72,7 @@ export const {
   sendLoading,
   sendPredictions,
   setChatQuery,
+  setAudio,
   allAnimationStop,
   allAnimationStart,
   sendBtnStart,
@@ -75,6 +83,7 @@ export const {
   startBubblesAnimation,
   setIsBubbleClick,
   setMessageId,
+  sendIsPredictionsLoading,
 } = bubblesSlice.actions
 
 export default bubblesSlice.reducer

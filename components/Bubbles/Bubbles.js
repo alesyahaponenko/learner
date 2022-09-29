@@ -12,6 +12,8 @@ import {
 const Bubbles = () => {
   const {
     isBubbleClick,
+    preloadAnimation,
+    isPredictionsLoading,
     bubblesAnimation,
     predictions,
     allowAnimation,
@@ -33,6 +35,7 @@ const Bubbles = () => {
   const tl_more = useRef(null)
   const tl_hover = useRef(null)
   const tl_moveDown = useRef(null)
+  const tl_loadAnim = useRef(null)
 
   const [bubbles, setBubbles] = useState(null)
   const [big, setBig] = useState(null)
@@ -47,19 +50,28 @@ const Bubbles = () => {
       let arr = [...predictions]
       arr.splice(bubblePosition, 0, arr.shift())
       setCurrentData(arr)
-      // console.log('currentDataA', currentData)
     } else {
       let arr = [...predictions]
       setCurrentData(arr)
     }
-
-    // const predictions_copy = [...currentData]
-    // setPredictions_sorted(
-    //     predictions_copy.sort(function (a, b) {
-    //       return a.rank - b.rank
-    //     })
-    // )
   }, [predictions, isBubbleClick])
+
+  useEffect(() => {
+    if (isPredictionsLoading) {
+      let all = q('li').length
+      for (let i = 0; i < all; i++) {
+        gsap.to(q('li')[i].querySelector('.block_name'), { opacity: 0, duration: 0.2 })
+      }
+      gsap.to('.load', { autoAlpha: 1, duration: 1 })
+    } else {
+      let all = q('li').length
+      for (let i = 0; i < all; i++) {
+        gsap.to(q('li')[i].querySelector('.block_name'), { opacity: 1, duration: 1 })
+      }
+      gsap.to('.load', { autoAlpha: 0, duration: 1 })
+    }
+    console.log('isPredictionsLoading', isPredictionsLoading)
+  }, [isPredictionsLoading, predictions])
 
   useEffect(() => {
     if (!isReady || isBubbleClick) return
@@ -69,10 +81,11 @@ const Bubbles = () => {
       // dispatch(sendBtnStart())
       return
     }
-    console.log(all)
+
     setBig(q('li')[0])
-    console.log(big)
+
     const vh = (coef) => window.innerHeight * (coef / 100)
+
     tl_intro.current = gsap.timeline({
       paused: true,
       onStart: () => dispatch(allAnimationStop()),
@@ -94,6 +107,7 @@ const Bubbles = () => {
         left: '50%',
         width: '30vh',
         height: '30vh',
+        zIndex: 0,
         duration: 1,
         scale: 1,
         ease: 'back',
@@ -108,6 +122,13 @@ const Bubbles = () => {
             top: '50vh',
             left: '50vw',
             scale: 1,
+            zIndex: () => {
+              if (i < 6) {
+                return i
+              } else {
+                return all - i
+              }
+            },
             duration: 1,
             ease: 'back',
           },
@@ -130,6 +151,7 @@ const Bubbles = () => {
       width: '30vh',
       height: '30vh',
       duration: 1,
+      zIndex: 0,
     })
   }, [big])
 
@@ -183,6 +205,13 @@ const Bubbles = () => {
             yPercent: -50,
             x: vh(28) * Math.cos(startAngle * rad),
             y: vh(28) * Math.sin(startAngle * rad),
+            // zIndex: () => {
+            //   if (i < 6) {
+            //     return i
+            //   } else {
+            //     return (all - i)
+            //   }
+            // },
             scale: 1,
             opacity: 1,
             duration: 1,
@@ -257,6 +286,7 @@ const Bubbles = () => {
 
   const hoverBubble = (e) => {
     tl_hover.current = gsap.timeline({ paused: true })
+    tl_hover.current.set('.bubbles', { zIndex: 0 })
     tl_hover.current.set(e.target.querySelector('.short_description'), {
       display: 'flex',
       opacity: 0,
@@ -270,7 +300,8 @@ const Bubbles = () => {
       tl_hover.current.play()
     }
   }
-  const hoverBubbleStop = () => {
+
+  const hoverBubbleStop = (e) => {
     tl_hover.current.reverse()
   }
 
@@ -295,7 +326,7 @@ const Bubbles = () => {
 
   return (
     <>
-      <div className={styles.bubbles}>
+      <div className={styles.bubbles + ' bubbles'}>
         <ul ref={el}>
           {currentData &&
             currentData.map((el, index) => (
@@ -306,10 +337,15 @@ const Bubbles = () => {
                 onMouseLeave={hoverBubbleStop}
                 className={'liAnim'}
               >
+                {index === bubblePosition ? <div className="load">loading...</div> : null}
                 <div className={styles.block_name + ' block_name'}>{el.block_name}</div>
 
-                <div className={styles.short_description + ' short_description'}>
-                  {el.short_description}
+                <div
+                  className={
+                    styles.short_description + ' short_description' + ' ' + isPredictionsLoading
+                  }
+                >
+                  {!isPredictionsLoading ? el.short_description : null}
                   <div className={styles.more + ' more'} onClick={clickMore}>
                     more...
                   </div>

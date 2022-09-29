@@ -1,7 +1,8 @@
 import Home from '../components/Home/Home'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setMouseCoordinate } from '../store/feutures/bubblesSlicer'
+import Header from '../components/Header/Header'
 
 function App() {
   const dispatch = useDispatch()
@@ -21,6 +22,7 @@ function App() {
   return (
     <div className="container" onMouseMove={handleMouseMove}>
       <div className="page">
+        <Header />
         <Home />
       </div>
     </div>

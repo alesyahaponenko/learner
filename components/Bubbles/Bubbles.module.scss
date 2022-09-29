@@ -9,7 +9,7 @@
   background: #20b9fc;
   border-radius: 10px;
   padding: 15px;
-  width: 135%;
+  width: 235%;
   display: none;
 
   .more {
@@ -21,7 +21,7 @@
 .short_description:after {
   content: '';
   position: absolute;
-  left: 42%;
+  left:46%;
   top: 99%;
   width: 0;
   height: 0;
@@ -31,20 +31,18 @@
   clear: both;
 }
 
-
 .long_description {
   display: none;
 }
 
-
 .bubbles {
   position: fixed;
-  top: 0;
+  top: 7vh;
   left: 0;
   bottom: 0;
   right: 0;
   width: 100vw;
-  height: 100vh;
+  height: 93vh;
 }
 
 .bubbles ul {
