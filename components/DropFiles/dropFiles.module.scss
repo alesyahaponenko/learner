@@ -1,0 +1,49 @@
+.df {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: 70%;
+  border: 1px solid #1a1a1a33;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    background-color: #1a1a1a1a;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+  p {
+    font-size: 0.9rem;
+    &:not(:last-child) {
+      margin-bottom: 0.5rem;
+    }
+  }
+  button {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-weight: inherit;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  input[type='file'] {
+    position: absolute;
+    opacity: 0;
+  }
+}
